@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Api._02_Domain.Manage;
-using Whatflix.Api._03_Data.Mdo;
+using Whatflix.Api._03_Data.Mdo.Movie;
+using Whatflix.Api._03_Data.Mdo.UserPreference;
 using Whatflix.Api._03_Data.Repository;
 using Whatflix.Api._04_Infrastructure.Helpers;
 
@@ -53,34 +53,13 @@ namespace Whatflix.Api._01_Presentation.Controllers
                 userPreferences.Add(new UserPreferenceMdo
                 {
                     UserId = preference.UserId,
-                    Movies = GetMoviesByPreference(movies, preference)
+                    FavoriteActors = preference.FavoriteActors,
+                    FavoriteDirectors = preference.FavoriteDirectors,
+                    PreferedLanguages = preference.PreferedLanguages
                 });
             }
 
             return userPreferences;
-        }
-
-        private List<MovieMdo> GetMoviesByPreference(IEnumerable<MovieMdo> movies, UserPreferenceMapper preference)
-        {
-            var userMovies = new List<MovieMdo>();
-
-            foreach (var movie in movies)
-            {
-                var actors = movie.Actors.Where(a => preference.FavoriteActors.Any(fa => fa == a)).ToList();
-                var director = preference.FavoriteDirectors.FirstOrDefault(fd => fd == movie.Director);
-                var language = preference.PreferedLanguages.FirstOrDefault(pl => pl == movie.Language);
-
-                userMovies.Add(new MovieMdo
-                {
-                    Actors = actors,
-                    Language = language,
-                    Director = director,
-                    MovieId = movie.MovieId,
-                    Title = movie.Title
-                });
-            }
-
-            return userMovies;
         }
     }
 }

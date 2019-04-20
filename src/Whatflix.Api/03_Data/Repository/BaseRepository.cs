@@ -9,6 +9,7 @@ namespace Whatflix.Api._03_Data.Repository
         private IMongoClient _client;
         private IMongoDatabase _database;
         protected readonly IMongoCollection<T> _collection;
+        protected readonly Collation _caseInsensitiveCollation = new Collation("en", strength: CollationStrength.Primary);
 
         public BaseRepository(string connectionString, string collectionName)
         {

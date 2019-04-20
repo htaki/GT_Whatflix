@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Whatflix.Api._03_Data.Mdo
+namespace Whatflix.Api._03_Data.Mdo.Movie
 {
-    [Serializable]
     public class MovieMdo : BaseMdo
     {
         [DataMember]
