@@ -24,17 +24,16 @@ namespace Whatflix.Api._03_Data.Repository
             var titleFilter = Builders<MovieMdo>.Filter.In(f => f.Title, searchWords);
             var directorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, searchWords);
 
-            var filter = Builders<MovieMdo>.Filter.Or(actorFilter, titleFilter, directorFilter);
-            var sort = Builders<MovieMdo>.Sort.Ascending(m => m.Title);
+            var filterDefinition = Builders<MovieMdo>.Filter.Or(actorFilter, titleFilter, directorFilter);
+            var sortDefinition = Builders<MovieMdo>.Sort.Ascending(m => m.Title);
             var findOptions = new FindOptions<MovieMdo, MovieMdo>
             {
                 Collation = _caseInsensitiveCollation,
-                Sort = sort,
-                Projection = Builders<MovieMdo>.Projection
-                .Include(p => p.Title)
+                Sort = sortDefinition,
+                Projection = Builders<MovieMdo>.Projection.Include(p => p.Title)
             };
 
-            var movieCusror = await _collection.FindAsync(filter, findOptions);
+            var movieCusror = await _collection.FindAsync(filterDefinition, findOptions);
             return await movieCusror.ToListAsync();
         }
 
@@ -47,17 +46,16 @@ namespace Whatflix.Api._03_Data.Repository
             var directorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, directors);
             var languageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, userPreference.PreferedLanguages);
 
-            var filter = Builders<MovieMdo>.Filter.And(actorFilter, directorFilter, languageFilter);
-            var sort = Builders<MovieMdo>.Sort.Ascending(m => m.Title);
+            var filterDefinition = Builders<MovieMdo>.Filter.And(actorFilter, directorFilter, languageFilter);
+            var sortDefinition = Builders<MovieMdo>.Sort.Ascending(m => m.Title);
             var findOptions = new FindOptions<MovieMdo, MovieMdo>
             {
                 Collation = _caseInsensitiveCollation,
-                Sort = sort,
-                Projection = Builders<MovieMdo>.Projection
-                .Include(p => p.Title)
+                Sort = sortDefinition,
+                Projection = Builders<MovieMdo>.Projection.Include(p => p.Title)
             };
 
-            var movieCusror = await _collection.FindAsync(filter, findOptions);
+            var movieCusror = await _collection.FindAsync(filterDefinition, findOptions);
             return await movieCusror.ToListAsync();
         }
     }

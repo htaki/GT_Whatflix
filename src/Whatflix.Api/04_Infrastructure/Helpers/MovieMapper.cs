@@ -9,6 +9,5 @@ namespace Whatflix.Api._04_Infrastructure.Helpers
 
         [Name("original_language")]
         public string OriginalLanguage { get; set; }
-
     }
 }

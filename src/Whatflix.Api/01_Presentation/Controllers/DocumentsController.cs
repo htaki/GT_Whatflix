@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Whatflix.Api._02_Domain.Manage;
-using Whatflix.Api._03_Data.Mdo.Movie;
 using Whatflix.Api._03_Data.Mdo.UserPreference;
 using Whatflix.Api._03_Data.Repository;
 using Whatflix.Api._04_Infrastructure.Helpers;
 
 namespace Whatflix.Api._01_Presentation.Controllers
 {
-    [Route("database/replicate")]
+    [Route("documents/replicate")]
     [ApiController]
-    public class DatabaseController : ControllerBase
+    public class DocumentsController : ControllerBase
     {
         ManageRawMovieData _manageRawMovieData;
         MoviesRepository _moviesRepository;
         UserPreferencesRepository _userPreferencesRepository;
 
-        public DatabaseController(MoviesRepository moviesRepository,
+        public DocumentsController(MoviesRepository moviesRepository,
           UserPreferencesRepository userPreferencesRepository)
         {
             _manageRawMovieData = new ManageRawMovieData();
@@ -28,10 +27,10 @@ namespace Whatflix.Api._01_Presentation.Controllers
         [HttpPut("users")]
         public async Task<IActionResult> ReplicateUsers()
         {
-            var movies = _manageRawMovieData.ReadRawData();
             var userPreferencesFromData = _manageRawMovieData.GetUserPreferenceFromData();
-            var userPreferences = GetUserPreferences(movies, userPreferencesFromData);
+            var userPreferences = GetUserPreferences(userPreferencesFromData);
             await _userPreferencesRepository.InsertMany(userPreferences);
+
             return Ok();
         }
 
@@ -44,7 +43,7 @@ namespace Whatflix.Api._01_Presentation.Controllers
             return Ok();
         }
 
-        private IEnumerable<UserPreferenceMdo> GetUserPreferences(IEnumerable<MovieMdo> movies, IEnumerable<UserPreferenceMapper> userPreferencesFromData)
+        private IEnumerable<UserPreferenceMdo> GetUserPreferences(IEnumerable<UserPreferenceMapper> userPreferencesFromData)
         {
             var userPreferences = new List<UserPreferenceMdo>();
 
