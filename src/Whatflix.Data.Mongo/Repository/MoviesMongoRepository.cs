@@ -12,20 +12,14 @@ using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Mongo.Repository
 {
-    public class MoviesMongoRepository : BaseMongoRepository<MovieMdo>, IMovieRepository
+    public class MoviesMongoRepository : BaseMongoRepository<IMovie, MovieMdo>, IMovieRepository
     {
         public const string COLLECTION_NAME = "movies";
         private IMapper _mapper;
 
-        public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper) : base(serviceSettings, COLLECTION_NAME)
+        public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper) : base(serviceSettings, mapper, COLLECTION_NAME)
         {
             _mapper = mapper;
-        }
-
-        public async Task InsertMany(IEnumerable<IMovie> movies)
-        {
-            var mongoDataObjects = _mapper.Map<IEnumerable<MovieMdo>>(movies);
-            await _collection.InsertManyAsync(mongoDataObjects);
         }
 
         public async Task<List<IMovie>> Search(string[] searchWords)

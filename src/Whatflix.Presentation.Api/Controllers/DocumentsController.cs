@@ -6,12 +6,12 @@ using Whatflix.Domain.Manage;
 
 namespace Whatflix.Presentation.Api.Controllers
 {
-    [Route("documents/replicate")]
+    [Route("documents")]
     [ApiController]
     public class DocumentsController : ControllerBase
     {
-        ManageRawMovieData _manageRawMovieData;
-        ManageMovie _manageMovie;
+        private readonly ManageRawMovieData _manageRawMovieData;
+        private readonly ManageMovie _manageMovie;
 
         public DocumentsController(ManageMovie moviesRepository)
         {
@@ -19,7 +19,7 @@ namespace Whatflix.Presentation.Api.Controllers
             _manageMovie = moviesRepository;
         }
 
-        [HttpPut("movies")]
+        [HttpPut("replicate/movies")]
         public async Task<IActionResult> ReplicateMovies()
         {
             try

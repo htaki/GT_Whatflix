@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Nest;
+using System.Collections.Generic;
 
 namespace Whatflix.Data.Elasticsearch.Ado.Movie
 {
+    [ElasticsearchType(Name = "movies", IdProperty = "MovieId")]
     public class MovieAdo
     {
         public int MovieId { get; set; }

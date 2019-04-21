@@ -13,7 +13,7 @@ namespace Whatflix.Domain.Manage
     public class ManageRawMovieData
     {
         private const string CREDITS_PATH = "wwwroot/tmdb_5000_credits.csv";
-        private const string MOVIES_PATH = "wwwroot/tmdb_5000_credits.csv";
+        private const string MOVIES_PATH = "wwwroot/tmdb_5000_movies.csv";
 
         public IEnumerable<MovieDto> ReadRawData()
         {
