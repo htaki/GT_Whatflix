@@ -9,7 +9,8 @@ namespace Whatflix.Domain.Manage
 {
     public sealed class ManageUserPreference
     {
-        private const string PATH = "";
+        private const string PATH = "wwwroot/user_preferences.json";
+
         private static ManageUserPreference _instance;
         private static readonly object padlock = new object();
         private IEnumerable<UserPreferenceDto> _userPreferences;
@@ -37,7 +38,7 @@ namespace Whatflix.Domain.Manage
 
         public async Task<UserPreferenceDto> GetUserPreferenceById(int userId)
         {
-            if(_userPreferences == null)
+            if (_userPreferences == null)
             {
                 using (StreamReader streamReader = new StreamReader(PATH))
                 {

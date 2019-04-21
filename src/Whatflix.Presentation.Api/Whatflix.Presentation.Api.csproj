@@ -25,7 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Content Remove="wwwroot\Mongo.txt" />
+    <Content Remove="wwwroot\tmdb_5000_credits.csv" />
+    <Content Remove="wwwroot\tmdb_5000_movies.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Mongo.txt" />
+    <None Include="wwwroot\tmdb_5000_credits.csv" />
+    <None Include="wwwroot\tmdb_5000_movies.csv" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +49,12 @@
     <ProjectReference Include="..\Whatflix.Domain\Whatflix.Domain.csproj" />
     <ProjectReference Include="..\Whatflix.Infrastructure.Injection\Whatflix.Infrastructure.Injection.csproj" />
     <ProjectReference Include="..\Whatflix.Infrastructure.Mapping\Whatflix.Infrastructure.Mapping.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\user_preferences.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -12,22 +12,22 @@ namespace Whatflix.Domain.Manage
 {
     public class ManageRawMovieData
     {
+        private const string CREDITS_PATH = "wwwroot/tmdb_5000_credits.csv";
+        private const string MOVIES_PATH = "wwwroot/tmdb_5000_credits.csv";
+
         public IEnumerable<MovieDto> ReadRawData()
         {
-            var rootPath = @"E:\Codespace\GT\GT_Whatflix\src\Whatflix.Infrastructure\SolutionItems\";
-            var creditsPath = rootPath + "tmdb_5000_credits.csv";
-            var moviesPath = rootPath + "tmdb_5000_movies.csv";
             var movies = new List<MovieDto>();
 
-            ReadFromMoviesDataset(movies, moviesPath);
-            ReadFromCreditsDataset(movies, creditsPath);
+            ReadFromMoviesDataset(movies);
+            ReadFromCreditsDataset(movies);
 
             return movies;
         }
 
-        private void ReadFromCreditsDataset(List<MovieDto> movies, string creditsPath)
+        private void ReadFromCreditsDataset(List<MovieDto> movies)
         {
-            using (var reader = new StreamReader(creditsPath))
+            using (var reader = new StreamReader(CREDITS_PATH))
             using (var csv = new CsvReader(reader))
             {
                 var records = csv.GetRecords<CreditsMapper>();
@@ -43,9 +43,9 @@ namespace Whatflix.Domain.Manage
             }
         }
 
-        private void ReadFromMoviesDataset(List<MovieDto> movies, string moviesPath)
+        private void ReadFromMoviesDataset(List<MovieDto> movies)
         {
-            using (var reader = new StreamReader(moviesPath))
+            using (var reader = new StreamReader(MOVIES_PATH))
             using (var csv = new CsvReader(reader))
             {
                 var records = csv.GetRecords<MovieMapper>();

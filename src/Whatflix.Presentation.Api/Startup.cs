@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
-using Whatflix.Infrastructure;
 using Whatflix.Infrastructure.Injection;
 using Whatflix.Infrastructure.Mapping;
+using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Api
 {
@@ -29,7 +29,7 @@ namespace Whatflix.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.Configure<ServiceSettings>(Configuration);
+            services.Configure<SettingsWrapper>(Configuration);
 
             _injectionModule.ConfigureServices(services);
             _mappingModule.ConfigureServices(services);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
 using Whatflix.Data.Mongo.Mdo.Movie;
-using Whatflix.Infrastructure;
+using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Mongo.Repository
 {
@@ -17,9 +17,7 @@ namespace Whatflix.Data.Mongo.Repository
         public const string COLLECTION_NAME = "movies";
         private IMapper _mapper;
 
-        public MoviesMongoRepository(IOptions<ServiceSettings> serviceSettings,
-            IMapper mapper)
-            : base(serviceSettings.Value.Whatfix_Db.ConnectionString, COLLECTION_NAME)
+        public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper) : base(serviceSettings, COLLECTION_NAME)
         {
             _mapper = mapper;
         }

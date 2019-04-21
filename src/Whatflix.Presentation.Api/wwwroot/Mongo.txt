@@ -1,0 +1,13 @@
+﻿	db.getCollection('movies').createIndex(
+	{ 
+		Actors: 1, 
+		Director: 1, 
+		Title: 1 
+	},
+	{
+		name: "Search"
+	})
+
+	db.getCollection('movies').createIndex({'Actors':1})
+	db.getCollection('movies').createIndex({'Director':1})
+	db.getCollection('movies').createIndex({'Title':1})

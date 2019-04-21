@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./src/whatflix.Api
+cd ./src/whatflix.presentation.api
 rm -rf ./bin/output
 dotnet publish -c Release -o ./bin/output
 docker build -t whatflix .

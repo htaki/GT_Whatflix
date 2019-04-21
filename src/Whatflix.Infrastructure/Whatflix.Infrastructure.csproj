@@ -5,16 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="SolutionItems\user_preferences.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="SolutionItems\user_preferences.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Exceptions\" />
   </ItemGroup>
 
