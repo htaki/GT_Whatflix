@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Nest;
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
@@ -21,77 +22,83 @@ namespace Whatflix.Data.Elasticsearch.Repository
 
         public async Task<List<IMovie>> Search(string[] searchWords)
         {
-            //var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
-            //    .Query(query => query
-            //        .Bool(b => b
-            //            .Should(m => m
-            //                .MultiMatch(mm => mm
-            //                    .Fields(fs => fs
-            //                        .Field(f => f.Actors.Suffix("search"))
-            //                        .Field(f => f.Director.Suffix("search"))
-            //                        .Field(f => f.Title.Suffix("search"))
-            //                    )
-            //                    .Query(string.Join(" ", searchWords))
-            //                )
-            //            )
-            //        )
-            //    )
-            //);
-
-            var searchQuery = "(";
-            for (int i = 0; i < searchWords.Length; i++)
-            {
-                searchQuery += searchWords[i] + ")";
-
-                if (i < searchWords.Length - 1)
-                {
-                    searchQuery += " OR ";
-                }
-            }
-
-            var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
-                .Query(query => query
-                    .QueryString(qs => qs
-                        .Query(searchQuery)
-                        .Fields(fs => fs
-                            .Field(f => f.Actors.Suffix("search"))
-                            .Field(f => f.Director.Suffix("search"))
-                            .Field(f => f.Title.Suffix("search"))
-                        )
-                    )
-                )
-            );
-
-            var doucments = searchResponse.Documents;
-
-            return _mapper.Map<List<IMovie>>(doucments);
-        }
-
-        public async Task<List<IMovie>> Search(string[] searchWords, string[] favoriteActors, string[] favoriteDirectors, string[] favoriteLanguages)
-        {
-            var actors = searchWords.Where(sw => favoriteActors.Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)));
-            var directors = searchWords.Where(sw => favoriteDirectors.Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)));
-
             var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
                 .Query(query => query
                     .Bool(b => b
-                        .Must(m => m
-                            .Bool(b_ => b_
-                                .Should(sh => sh
-                                    .Match(ma => ma
-                                        .Field(f => f.Actors.Suffix("search"))
-                                        .Query(string.Join(" ", actors))
-                                    )
-                                )
+                        .Should(sh => sh
+                            .Terms(t => t
+                                .Terms(searchWords)
+                                .Field(f => f.Actors.Suffix("keyword"))
+                            ), sh => sh
+                            .Terms(t => t
+                                .Terms(searchWords)
+                                .Field(f => f.Director.Suffix("keyword"))
+                            ), sh => sh
+                            .Terms(t => t
+                                .Terms(searchWords)
+                                .Field(f => f.Title.Suffix("keyword"))
                             )
                         )
                     )
                 )
+                .Sort(so => so
+                    .Ascending(f => f.Title.Suffix("keyword"))
+                )
+                .Size(int.MaxValue)
             );
 
             var doucments = searchResponse.Documents;
-
             return _mapper.Map<List<IMovie>>(doucments);
+        }
+
+        public async Task<List<IMovie>> Search(string[] searchWords, string[] preferredActors, string[] preferredDirectors, string[] favoriteLanguages)
+        {
+            var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
+                .Query(query => query
+                    .Bool(b => b
+                        .Must(m => m
+                            .Terms(t => t
+                                .Terms(Resolve(preferredActors))
+                                .Field(f => f.Actors.Suffix("keyword"))
+                            ), m => m
+                            .Terms(t => t
+                                .Terms(Resolve(preferredDirectors))
+                                .Field(f => f.Director.Suffix("keyword"))
+                            ), m => m
+                            .Terms(t => t
+                                .Terms(Resolve(favoriteLanguages))
+                                .Field(f => f.Language.Suffix("keyword"))
+                            )
+                        )
+                    )
+                )
+                .Sort(so => so
+                    .Ascending(f => f.Title.Suffix("keyword"))
+                )
+                .Size(int.MaxValue)
+            );
+
+            var doucments = searchResponse.Documents;
+            return _mapper.Map<List<IMovie>>(doucments);
+        }
+
+        private IEnumerable<object> Resolve(IEnumerable<string> preferredActors)
+        {
+            if (!preferredActors.Any())
+            {
+                return new string[] { "null!" };
+            }
+
+            return preferredActors;
+        }
+
+        private string RawQuery(SearchDescriptor<MovieAdo> debugQuery)
+        {
+            using (MemoryStream mStream = new MemoryStream())
+            {
+                _client.RequestResponseSerializer.Serialize(debugQuery, mStream);
+                return Encoding.ASCII.GetString(mStream.ToArray());
+            }
         }
     }
 }

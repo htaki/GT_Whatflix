@@ -22,8 +22,7 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                var indices = await _manageElasticsearch.GetIndicesAsync();
-                return Ok(indices);
+                return Ok(await _manageElasticsearch.GetIndicesAsync());
             }
             catch (Exception ex)
             {
@@ -46,7 +45,7 @@ namespace Whatflix.Presentation.Api.Controllers
         }
 
         [HttpPut("index")]
-        public async Task<IActionResult> CreateIndex(string index)
+        public async Task<IActionResult> SetIndex(string index)
         {
             try
             {

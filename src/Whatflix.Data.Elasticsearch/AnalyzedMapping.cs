@@ -31,6 +31,9 @@ namespace Whatflix.Data.Elasticsearch
                                         .Name("search")
                                         .Analyzer("text_analyzer")
                                     )
+                                    .Keyword(kw => kw
+                                        .Name("keyword")
+                                    )
                                 )
                             )
                             .Text(txt => txt
@@ -39,6 +42,9 @@ namespace Whatflix.Data.Elasticsearch
                                     .Text(f_txt => f_txt
                                         .Name("search")
                                         .Analyzer("text_analyzer")
+                                    )
+                                    .Keyword(kw => kw
+                                        .Name("keyword")
                                     )
                                 )
                             )
@@ -49,6 +55,9 @@ namespace Whatflix.Data.Elasticsearch
                                         .Name("search")
                                         .Analyzer("text_analyzer")
                                     )
+                                    .Keyword(kw => kw
+                                        .Name("keyword")
+                                    )
                                 )
                             )
                             .Text(txt => txt
@@ -57,6 +66,9 @@ namespace Whatflix.Data.Elasticsearch
                                     .Text(f_txt => f_txt
                                         .Name("search")
                                         .Analyzer("text_analyzer")
+                                    )
+                                    .Keyword(kw => kw
+                                        .Name("keyword")
                                     )
                                 )
                             )

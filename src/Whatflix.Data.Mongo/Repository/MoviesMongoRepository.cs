@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
@@ -43,13 +41,10 @@ namespace Whatflix.Data.Mongo.Repository
             return _mapper.Map<List<IMovie>>(mongoDataObjects);
         }
 
-        public async Task<List<IMovie>> Search(string[] searchWords, string[] favoriteActors, string[] favoriteDirectors, string[] favoriteLanguages)
+        public async Task<List<IMovie>> Search(string[] searchWords, string[] preferredActors, string[] preferredDirectors, string[] favoriteLanguages)
         {
-            var actors = searchWords.Where(sw => favoriteActors.Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)));
-            var directors = searchWords.Where(sw => favoriteDirectors.Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)));
-
-            var actorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, actors);
-            var directorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, directors);
+            var actorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, preferredActors);
+            var directorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, preferredDirectors);
             var languageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, favoriteLanguages);
 
             var filterDefinition = Builders<MovieMdo>.Filter.And(actorFilter, directorFilter, languageFilter);

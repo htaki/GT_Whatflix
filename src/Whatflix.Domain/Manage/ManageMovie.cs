@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
@@ -28,7 +30,11 @@ namespace Whatflix.Domain.Manage
 
         public async Task<List<MovieDto>> Search(string[] searchWords, UserPreferenceDto userPreference)
         {
-            var movieObjects = await _moviesRepository.Search(searchWords, userPreference.FavoriteActors, userPreference.FavoriteDirectors, userPreference.PreferedLanguages);
+            var movieObjects = await _moviesRepository.Search(searchWords,
+                GetPreferredActors(searchWords, userPreference),
+                GetPreferredDirectors(searchWords, userPreference),
+                userPreference.PreferredLanguages);
+
             return _mapper.Map<List<MovieDto>>(movieObjects);
         }
 
@@ -36,6 +42,22 @@ namespace Whatflix.Domain.Manage
         {
             var movieObjects = await _moviesRepository.Search(searchWords);
             return _mapper.Map<List<MovieDto>>(movieObjects);
+        }
+
+        private string[] GetPreferredActors(string[] searchWords, UserPreferenceDto userPreference)
+        {
+            return searchWords
+                .Where(sw => userPreference.FavoriteActors
+                .Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)))
+                .ToArray();
+        }
+
+        private string[] GetPreferredDirectors(string[] searchWords, UserPreferenceDto userPreference)
+        {
+            return searchWords
+                .Where(sw => userPreference.FavoriteDirectors
+                .Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)))
+                .ToArray();
         }
     }
 }

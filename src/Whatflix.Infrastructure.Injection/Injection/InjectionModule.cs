@@ -2,7 +2,6 @@
 using Whatflix.Data.Abstract.Repository;
 using Whatflix.Data.Elasticsearch;
 using Whatflix.Data.Elasticsearch.Repository;
-using Whatflix.Data.Mongo.Repository;
 using Whatflix.Domain.Manage;
 
 namespace Whatflix.Infrastructure.Injection
@@ -15,6 +14,7 @@ namespace Whatflix.Infrastructure.Injection
             services.AddScoped<ManageElasticsearch>();
             services.AddScoped<ElasticsearchWrapper>();
             services.AddScoped<IMovieRepository, MoviesElasticsearchRepository>();
+            // services.AddScoped<IMovieRepository, MoviesMongoRepository>();
             services.AddScoped<IElasticsearchSettingsRepository, ElasticsearchSettingsRepository>();
         }
     }

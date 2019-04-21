@@ -8,7 +8,7 @@ namespace Whatflix.Domain.Dto.UserPreference
         public int UserId { get; set; }
 
         [JsonProperty("preferred_languages")]
-        public string[] PreferedLanguages { get; set; }
+        public string[] PreferredLanguages { get; set; }
 
         [JsonProperty("favourite_actors")]
         public string[] FavoriteActors { get; set; }

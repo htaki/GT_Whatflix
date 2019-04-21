@@ -58,11 +58,11 @@ namespace Whatflix.Presentation.Api.Controllers
 
         private IEnumerable<string> MapMovies(List<MovieDto>[] movieList)
         {
-            var userPreferedMovies = movieList[0];
+            var userPreferredMovies = movieList[0];
             var otherMovies = movieList[1];
-            otherMovies = otherMovies.Where(o => !userPreferedMovies.Any(u => o.Title == u.Title)).ToList();
+            otherMovies = otherMovies.Where(o => !userPreferredMovies.Any(u => o.Title == u.Title)).ToList();
 
-            return userPreferedMovies.Select(m => m.Title).Concat(otherMovies.Select(m => m.Title));
+            return userPreferredMovies.Select(m => m.Title).Concat(otherMovies.Select(m => m.Title));
         }
     }
 }

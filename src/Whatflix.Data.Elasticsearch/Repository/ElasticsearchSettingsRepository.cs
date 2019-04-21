@@ -30,12 +30,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
 
         public async Task<IBulkAliasResponse> SetIndexAsync(string index)
         {
-            IGetAliasResponse alias = await _elasticsearchWrapper.Client.GetAliasAsync(x => x.Index(index));
+            var alias = await _elasticsearchWrapper.Client.GetAliasAsync(x => x.Index(index));
 
             if (alias.Indices[index].Aliases.Count != 0)
             {
-                IEnumerable<string> Indices = await _elasticsearchWrapper.Client.GetIndicesPointingToAliasAsync(_elasticsearchWrapper.IndexAlias);
-
+                var Indices = await _elasticsearchWrapper.Client.GetIndicesPointingToAliasAsync(_elasticsearchWrapper.IndexAlias);
                 return await _elasticsearchWrapper.Client.AliasAsync(a => a
                     .Remove(i => i
                         .Index(Indices.FirstOrDefault())
