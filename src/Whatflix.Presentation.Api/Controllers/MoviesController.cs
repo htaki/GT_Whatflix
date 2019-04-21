@@ -30,7 +30,7 @@ namespace Whatflix.Presentation.Api.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest, "Searchtext cannot be empty.");
                 }
 
-                var searchWords = text.Split(',').Select(s => s.Trim()).ToArray();
+                var searchWords = GetSearchWords(text);
                 var userPreference = await ManageUserPreference.Instance.GetUserPreferenceById(userId);
 
                 if (userPreference == null)
@@ -63,6 +63,13 @@ namespace Whatflix.Presentation.Api.Controllers
             otherMovies = otherMovies.Where(o => !userPreferredMovies.Any(u => o.Title == u.Title)).ToList();
 
             return userPreferredMovies.Select(m => m.Title).Concat(otherMovies.Select(m => m.Title));
+        }
+
+        private string[] GetSearchWords(string text)
+        {
+            return text.Split(',')
+                    .Select(s => s.Trim())
+                    .ToArray();
         }
     }
 }
