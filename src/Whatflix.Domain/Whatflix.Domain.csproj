@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Dto\UserPreference\Internal\**" />
+    <EmbeddedResource Remove="Dto\UserPreference\Internal\**" />
+    <None Remove="Dto\UserPreference\Internal\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Whatflix.Data.Abstract\Whatflix.Data.Abstract.csproj" />
+    <ProjectReference Include="..\Whatflix.Infrastructure\Whatflix.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
