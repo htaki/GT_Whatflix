@@ -32,6 +32,7 @@ namespace Whatflix.Api
             services.Configure<SettingsWrapper>(Configuration);
 
             _injectionModule.ConfigureServices(services);
+            _injectionModule.ConfigureRepositories(services, shouldUseMongoRepository: bool.Parse(Configuration["Repositories:UseMongoRepository"]));
             _mappingModule.ConfigureServices(services);
 
             services.AddSwaggerGen(c =>

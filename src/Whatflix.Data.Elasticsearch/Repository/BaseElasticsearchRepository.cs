@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Nest;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,9 +7,9 @@ namespace Whatflix.Data.Elasticsearch.Repository
 {
     public class BaseElasticsearchRepository<TEntity, TDataObject> where TDataObject : class
     {
-        protected IElasticClient _client;
-        string _indexAlias;
-        IMapper _mapper;
+        protected readonly IElasticClient _client;
+        private readonly string _indexAlias;
+        private readonly IMapper _mapper;
 
         public BaseElasticsearchRepository(ElasticsearchWrapper elasticsearchWrapper, IMapper mapper)
         {
