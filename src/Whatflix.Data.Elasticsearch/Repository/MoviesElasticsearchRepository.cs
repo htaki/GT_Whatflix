@@ -50,6 +50,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
                 .Source(source => source
                     .Includes(i => i
                         .Field(f => f.Title)
+                        .Field(f => f.MovieId)
                     )
                 )
                 .Size(int.MaxValue)
@@ -92,6 +93,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
                 .Source(source => source
                     .Includes(i => i
                         .Field(f => f.Title)
+                        .Field(f => f.MovieId)
                     )
                 )
                 .Size(int.MaxValue)
@@ -110,7 +112,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
                     )
                  )
                  .Script(script => script
-                    .Source($"ctx._source.AppearedInSearches = ctx._source.AppearedInSearches + 1;")
+                    .Source($"ctx._source.appearedInSearches = ctx._source.appearedInSearches + 1;")
                  )
              );
         }
@@ -125,7 +127,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
                     )
                 )
                 .Sort(so => so
-                    .Ascending(f => f.AppearedInSearches)
+                    .Descending(f => f.AppearedInSearches)
                 )
                 .Source(source => source
                     .Includes(i => i

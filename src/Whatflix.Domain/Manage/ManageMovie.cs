@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
@@ -57,8 +58,8 @@ namespace Whatflix.Domain.Manage
                 var recommendedMovies = await _moviesRepository.GetRecommendationByMovieIdsAsync(userPreference.MovieIds);
                 recommendations.Add(new RecommendationsDto
                 {
-                    Movies = recommendedMovies,
-                    UserId = userPreference.UserId
+                    Movies = recommendedMovies.OrderBy(o => o),
+                    User = userPreference.UserId
                 });
             }
 
