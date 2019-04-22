@@ -34,7 +34,11 @@ namespace Whatflix.Presentation.Api.Controllers
                 var moviesTask = _manageMovie.SearchAsync(GetSearchWords(text));
                 var movieList = await Task.WhenAll(userMoviesTask, moviesTask);
 
-                return Ok(MapMovies(movieList));
+                var movieIds = new List<int>();
+                var movieResult = MapMovies(movieList, out movieIds);
+
+                _manageMovie.UpdatedAppeardOnSearchAsync(movieIds);
+                return Ok(movieResult);
             }
             catch (Exception ex)
             {
@@ -43,18 +47,23 @@ namespace Whatflix.Presentation.Api.Controllers
         }
 
         [HttpGet("users")]
-        public IActionResult GetRecommendations()
+        public async Task<IActionResult> GetRecommendations()
         {
-            return Ok();
+            return Ok(await _manageMovie.GetRecommendationsAsync());
         }
 
-        private IEnumerable<string> MapMovies(List<MovieDto>[] movieList)
+        private IEnumerable<string> MapMovies(List<MovieDto>[] movieList, out List<int> movieIds)
         {
+            movieIds = new List<int>();
+
             var userPreferredMovies = movieList[0] ?? new List<MovieDto>();
             var otherMovies = movieList[1] ?? new List<MovieDto>();
             otherMovies = otherMovies.Where(o => !userPreferredMovies.Any(u => o.Title == u.Title)).ToList();
 
-            return userPreferredMovies.Select(m => m.Title).Concat(otherMovies.Select(m => m.Title));
+            var movies = userPreferredMovies.Concat(otherMovies);
+            movieIds = movies.Select(s => s.MovieId).ToList();
+
+            return movies.Select(s => s.Title);
         }
 
         private string[] GetSearchWords(string text)

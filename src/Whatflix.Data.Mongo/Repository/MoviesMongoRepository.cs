@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
@@ -60,6 +61,31 @@ namespace Whatflix.Data.Mongo.Repository
             var mongoDataObjects = await movieCusror.ToListAsync();
 
             return _mapper.Map<List<IMovie>>(mongoDataObjects);
+        }
+
+        public async Task UpdatedAppeardInSearchAsync(List<int> movieIds)
+        {
+            var filterDefinition = Builders<MovieMdo>.Filter.In(f => f.MovieId, movieIds);
+            var updateDefinition = Builders<MovieMdo>.Update.Inc(f => f.AppearedInSearches, 1);
+
+            await _collection.UpdateManyAsync(filterDefinition, updateDefinition);
+        }
+
+        public async Task<IEnumerable<string>> GetRecommendationByMovieIdsAsync(List<int> movieIds)
+        {
+            var filterDefinition = Builders<MovieMdo>.Filter.In(f => f.MovieId, movieIds);
+            var sortDefinition = Builders<MovieMdo>.Sort.Ascending(m => m.AppearedInSearches);
+            var findOptions = new FindOptions<MovieMdo, MovieMdo>
+            {
+                Sort = sortDefinition,
+                Projection = Builders<MovieMdo>.Projection.Include(p => p.Title),
+                Limit = 3
+            };
+
+            var movieCusror = await _collection.FindAsync(filterDefinition, findOptions);
+            var mongoDataObjects = await movieCusror?.ToListAsync();
+
+            return mongoDataObjects.Select(m => m.Title);
         }
     }
 }

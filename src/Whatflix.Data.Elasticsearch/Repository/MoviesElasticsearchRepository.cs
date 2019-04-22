@@ -47,6 +47,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
                 .Sort(so => so
                     .Ascending(f => f.Title.Suffix("keyword"))
                 )
+                .Source(source => source
+                    .Includes(i => i
+                        .Field(f => f.Title)
+                    )
+                )
                 .Size(int.MaxValue)
             );
 
@@ -84,6 +89,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
                 .Sort(so => so
                     .Ascending(f => f.Title.Suffix("keyword"))
                 )
+                .Source(source => source
+                    .Includes(i => i
+                        .Field(f => f.Title)
+                    )
+                )
                 .Size(int.MaxValue)
             );
 
@@ -91,22 +101,50 @@ namespace Whatflix.Data.Elasticsearch.Repository
             return _mapper.Map<List<IMovie>>(doucments);
         }
 
-        private IEnumerable<object> Resolve(IEnumerable<string> preferredActors)
+        public async Task UpdatedAppeardInSearchAsync(List<int> movieIds)
         {
-            if (!preferredActors.Any())
-            {
-                return new string[] { "null!" };
-            }
-
-            return preferredActors;
+            await _client.UpdateByQueryAsync<MovieAdo>(u => u.Query(q => q
+                    .Terms(t => t
+                        .Field(f => f.MovieId)
+                        .Terms(movieIds)
+                    )
+                 )
+                 .Script(script => script
+                    .Source($"ctx._source.AppearedInSearches = ctx._source.AppearedInSearches + 1;")
+                 )
+             );
         }
 
-        private string RawQuery(SearchDescriptor<MovieAdo> debugQuery)
+        public async Task<IEnumerable<string>> GetRecommendationByMovieIdsAsync(List<int> movieIds)
         {
-            using (MemoryStream mStream = new MemoryStream())
+            var searchResponse = await _client.SearchAsync<MovieAdo>(q => q
+                .Query(query => query
+                    .Terms(t => t
+                        .Field(f => f.MovieId)
+                        .Terms(movieIds)
+                    )
+                )
+                .Sort(so => so
+                    .Ascending(f => f.AppearedInSearches)
+                )
+                .Source(source => source
+                    .Includes(i => i
+                        .Field(f => f.Title)
+                    )
+                )
+                .Size(3)
+            );
+
+            var doucments = searchResponse.Documents;
+            return doucments.Select(d => d.Title);
+        }
+
+        private string GetRawQueryForDebug(SearchDescriptor<MovieAdo> query)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                _client.RequestResponseSerializer.Serialize(debugQuery, mStream);
-                return Encoding.ASCII.GetString(mStream.ToArray());
+                _client.RequestResponseSerializer.Serialize(query, memoryStream);
+                return Encoding.ASCII.GetString(memoryStream.ToArray());
             }
         }
     }

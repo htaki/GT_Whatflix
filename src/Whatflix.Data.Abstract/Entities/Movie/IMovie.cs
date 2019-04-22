@@ -9,5 +9,6 @@ namespace Whatflix.Data.Abstract.Entities.Movie
         string Language { get; set; }
         string Director { get; set; }
         List<string> Actors { get; set; }
+        int AppearedInSearches { get; set; }
     }
 }

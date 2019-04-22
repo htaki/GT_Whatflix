@@ -21,5 +21,8 @@ namespace Whatflix.Data.Mongo.Mdo.Movie
 
         [DataMember]
         public List<string> Actors { get; set; }
+
+        [DataMember]
+        public int AppearedInSearches { get; set; }
     }
 }

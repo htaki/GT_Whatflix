@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
 using Whatflix.Domain.Dto.Movie;
+using Whatflix.Domain.Dto.UserPreference;
 
 namespace Whatflix.Domain.Manage
 {
@@ -35,10 +36,33 @@ namespace Whatflix.Domain.Manage
             return _mapper.Map<List<MovieDto>>(movieObjects);
         }
 
+        public async void UpdatedAppeardOnSearchAsync(List<int> movieIds)
+        {
+            await _moviesRepository.UpdatedAppeardInSearchAsync(movieIds);
+        }
+
         public async Task<List<MovieDto>> SearchAsync(string[] searchWords)
         {
             var movieObjects = await _moviesRepository.SearchAsync(searchWords);
             return _mapper.Map<List<MovieDto>>(movieObjects);
+        }
+
+        public async Task<List<RecommendationsDto>> GetRecommendationsAsync()
+        {
+            var userPreferences = await _userPreferenceRepository.GetUserPreferences();
+            var recommendations = new List<RecommendationsDto>();
+
+            foreach (var userPreference in userPreferences)
+            {
+                var recommendedMovies = await _moviesRepository.GetRecommendationByMovieIdsAsync(userPreference.MovieIds);
+                recommendations.Add(new RecommendationsDto
+                {
+                    Movies = recommendedMovies,
+                    UserId = userPreference.UserId
+                });
+            }
+
+            return recommendations;
         }
     }
 }
