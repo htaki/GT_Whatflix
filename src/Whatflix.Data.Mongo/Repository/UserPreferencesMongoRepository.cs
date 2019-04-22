@@ -10,7 +10,7 @@ using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Mongo.Repository
 {
-    public class UserPreferencesMongoRepository : BaseMongoRepository<IUserPreference, UserPreferenceMdo>, IUserPreferenceRepository
+    public class UserPreferencesMongoRepository : BaseMongoRepository<IUserPreferenceEntity, UserPreferenceMdo>, IUserPreferenceRepository
     {
         public const string COLLECTION_NAME = "user-preferences";
         private IMapper _mapper;

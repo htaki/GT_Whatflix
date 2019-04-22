@@ -5,7 +5,7 @@ using Whatflix.Data.Abstract.Entities.Movie;
 
 namespace Whatflix.Data.Mongo.Mdo.Movie
 {
-    public class MovieMdo : IMovie
+    public class MovieMdo : IMovieEntity
     {
         [BsonId]
         public int MovieId { get; set; }

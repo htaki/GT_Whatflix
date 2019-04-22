@@ -6,8 +6,8 @@ namespace Whatflix.Data.Abstract.Repository
 {
     public interface IUserPreferenceRepository
     {
-        Task InsertMany(IEnumerable<IUserPreference> entities);
+        Task InsertMany(IEnumerable<IUserPreferenceEntity> entities);
         Task<List<int>> GetMovieIdsByUserIdAsync(int userId);
-        Task<IEnumerable<IUserPreference>> GetUserPreferences();
+        Task<IEnumerable<IUserPreferenceEntity>> GetUserPreferences();
     }
 }

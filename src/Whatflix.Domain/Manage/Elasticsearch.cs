@@ -4,11 +4,11 @@ using Whatflix.Data.Abstract.Settings.Elasticsearch;
 
 namespace Whatflix.Domain.Manage
 {
-    public class ManageElasticsearch
+    public class Elasticsearch
     {
         IElasticsearchIndex _elasticsearchIndex;
 
-        public ManageElasticsearch(IElasticsearchIndex elasticsearchIndex)
+        public Elasticsearch(IElasticsearchIndex elasticsearchIndex)
         {
             _elasticsearchIndex = elasticsearchIndex;
         }

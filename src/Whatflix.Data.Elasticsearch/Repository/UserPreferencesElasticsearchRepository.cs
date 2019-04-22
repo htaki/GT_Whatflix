@@ -10,7 +10,7 @@ using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Elasticsearch.Repository
 {
-    public class UserPreferencesElasticsearchRepository : BaseElasticsearchRepository<IUserPreference, UserPreferenceAdo>, IUserPreferenceRepository
+    public class UserPreferencesElasticsearchRepository : BaseElasticsearchRepository<IUserPreferenceEntity, UserPreferenceAdo>, IUserPreferenceRepository
     {
         private readonly IMapper _mapper;
         private const string INDEX_ALIAS_USER_PREFERENCES = "whatflix-user-preference";

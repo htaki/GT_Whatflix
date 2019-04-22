@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Whatflix.Domain.Dto.Movie;
+using Whatflix.Domain.Dto.UserPreference;
 using Whatflix.Domain.Manage;
+using Whatflix.Presentation.Api.Helpers;
 
 namespace Whatflix.Presentation.Api.Controllers
 {
@@ -10,15 +15,20 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class DocumentsController : ControllerBase
     {
-        private readonly ManageRawData _manageRawData;
-        private readonly ManageMovie _manageMovie;
-        private readonly ManageUserPreference _manageUserPreference;
+        private readonly DocumentsControllerHelper _documentsControllerHelper;
+        private readonly Movie _manageMovie;
+        private readonly UserPreference _manageUserPreference;
+        private readonly IMapper _mapper;
 
-        public DocumentsController(ManageMovie moviesRepository, ManageUserPreference manageUserPreference)
+        public DocumentsController(Movie moviesRepository,
+            UserPreference manageUserPreference,
+            DocumentsControllerHelper documentsControllerHelper,
+            IMapper mapper)
         {
-            _manageRawData = new ManageRawData();
+            _documentsControllerHelper = documentsControllerHelper;
             _manageMovie = moviesRepository;
             _manageUserPreference = manageUserPreference;
+            _mapper = mapper;
         }
 
         [HttpPut("replicate/movies")]
@@ -26,8 +36,8 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                var movies = _manageRawData.GetMovies();
-                await _manageMovie.InsertMany(movies);
+                var movies = _documentsControllerHelper.GetMovies();
+                await _manageMovie.InsertMany(_mapper.Map<IEnumerable<MovieDto>>(movies));
                 return Ok();
             }
             catch (Exception ex)
@@ -41,8 +51,8 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                var userPreferences = _manageRawData.GetUserPreferences();
-                await _manageUserPreference.InsertMany(userPreferences);
+                var userPreferences = _documentsControllerHelper.GetUserPreferences();
+                await _manageUserPreference.InsertMany(_mapper.Map<IEnumerable<UserPreferenceDto>>(userPreferences));
 
                 return Ok();
             }

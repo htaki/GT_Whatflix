@@ -9,13 +9,13 @@ using Whatflix.Domain.Dto.UserPreference;
 
 namespace Whatflix.Domain.Manage
 {
-    public class ManageMovie
+    public class Movie
     {
         private readonly IMovieRepository _moviesRepository;
         private readonly IUserPreferenceRepository _userPreferenceRepository;
         private IMapper _mapper;
 
-        public ManageMovie(IMovieRepository moviesRepository,
+        public Movie(IMovieRepository moviesRepository,
             IUserPreferenceRepository userPreferenceRepository,
             IMapper mapper)
         {
@@ -26,7 +26,7 @@ namespace Whatflix.Domain.Manage
 
         public async Task InsertMany(IEnumerable<MovieDto> movieDtos)
         {
-            await _moviesRepository.InsertMany(_mapper.Map<IEnumerable<IMovie>>(movieDtos));
+            await _moviesRepository.InsertMany(_mapper.Map<IEnumerable<IMovieEntity>>(movieDtos));
         }
 
         public async Task<List<MovieDto>> SearchAsync(string[] searchWords, int userId)

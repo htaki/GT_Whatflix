@@ -2,7 +2,7 @@
 
 namespace Whatflix.Data.Abstract.Entities.Movie
 {
-    public interface IMovie
+    public interface IMovieEntity
     {
         int MovieId { get; set; }
         string Title { get; set; }

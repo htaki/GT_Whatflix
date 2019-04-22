@@ -73,6 +73,10 @@ namespace Whatflix.Data.Elasticsearch.Settings
                                     )
                                 )
                             )
+                            .Number(numb => numb
+                                .Name(name => name.MovieId)
+                                .Type(NumberType.Integer)
+                            )
                         )
                     )
                 );

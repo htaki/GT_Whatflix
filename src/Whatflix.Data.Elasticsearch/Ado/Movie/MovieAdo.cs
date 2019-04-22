@@ -5,7 +5,7 @@ using Whatflix.Data.Abstract.Entities.Movie;
 namespace Whatflix.Data.Elasticsearch.Ado.Movie
 {
     [ElasticsearchType(Name = "movies", IdProperty = "MovieId")]
-    public class MovieAdo : IMovie
+    public class MovieAdo : IMovieEntity
     {
         public int MovieId { get; set; }
         public string Title { get; set; }

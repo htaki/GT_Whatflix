@@ -7,12 +7,12 @@ using Whatflix.Domain.Dto.UserPreference;
 
 namespace Whatflix.Domain.Manage
 {
-    public class ManageUserPreference
+    public class UserPreference
     {
         private readonly IUserPreferenceRepository _userPreferenceRepository;
         private IMapper _mapper;
 
-        public ManageUserPreference(IUserPreferenceRepository userPreferenceRepository,
+        public UserPreference(IUserPreferenceRepository userPreferenceRepository,
             IMapper mapper)
         {
             _userPreferenceRepository = userPreferenceRepository;
@@ -21,7 +21,7 @@ namespace Whatflix.Domain.Manage
 
         public async Task InsertMany(IEnumerable<UserPreferenceDto> userPreferenceDtos)
         {
-            var userPreferences = _mapper.Map<IEnumerable<IUserPreference>>(userPreferenceDtos);
+            var userPreferences = _mapper.Map<IEnumerable<IUserPreferenceEntity>>(userPreferenceDtos);
             await _userPreferenceRepository.InsertMany(userPreferences);
         }
     }

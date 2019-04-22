@@ -12,10 +12,10 @@ namespace Whatflix.Infrastructure.Injection
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ManageMovie>();
-            services.AddScoped<ManageUserPreference>();
+            services.AddScoped<Movie>();
+            services.AddScoped<UserPreference>();
             services.AddScoped<ElasticsearchWrapper>();
-            services.AddScoped<ManageElasticsearch>();
+            services.AddScoped<Domain.Manage.Elasticsearch>();
             services.AddScoped<IElasticsearchIndex, ElasticsearchIndex>();
         }
 

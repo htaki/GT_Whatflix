@@ -11,9 +11,9 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class ElasticsearchController : ControllerBase
     {
-        private readonly ManageElasticsearch _manageElasticsearch;
+        private readonly Domain.Manage.Elasticsearch _manageElasticsearch;
 
-        public ElasticsearchController(ManageElasticsearch manageElasticsearch)
+        public ElasticsearchController(Domain.Manage.Elasticsearch manageElasticsearch)
         {
             _manageElasticsearch = manageElasticsearch;
         }

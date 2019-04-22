@@ -13,9 +13,9 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        ManageMovie _manageMovie;
+        Movie _manageMovie;
 
-        public MoviesController(ManageMovie manageMovie)
+        public MoviesController(Movie manageMovie)
         {
             _manageMovie = manageMovie;
         }
@@ -61,7 +61,7 @@ namespace Whatflix.Presentation.Api.Controllers
             otherMovies = otherMovies.Where(o => !userPreferredMovies.Any(u => o.Title == u.Title)).ToList();
 
             var movies = userPreferredMovies.Concat(otherMovies);
-            movieIds = movies.Select(s => s.MovieId).ToList();
+            movieIds = userPreferredMovies.Select(s => s.MovieId).ToList();
 
             return movies.Select(s => s.Title);
         }

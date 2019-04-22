@@ -11,7 +11,7 @@ namespace Whatflix.Infrastructure.Mapping
             var configuration = new AutoMapper.MapperConfiguration(c =>
             {
                 /* source -> destination */
-                c.CreateMap<MovieDto, IMovie>();
+                c.CreateMap<MovieDto, IMovieEntity>();
             });
 
             services.AddSingleton(configuration.CreateMapper());

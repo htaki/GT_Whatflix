@@ -6,22 +6,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Whatflix.Domain.Dto.Movie;
-using Whatflix.Domain.Dto.UserPreference;
-using Whatflix.Infrastructure.Helpers;
 using Whatflix.Infrastructure.Helpers.Mappers;
+using Whatflix.Presentation.Api.Models;
 
-namespace Whatflix.Domain.Manage
+namespace Whatflix.Presentation.Api.Helpers
 {
-    public class ManageRawData
+    public class DocumentsControllerHelper
     {
         private const string CREDITS_PATH = "wwwroot/tmdb_5000_credits.csv";
         private const string MOVIES_PATH = "wwwroot/tmdb_5000_movies.csv";
         private const string USER_PREFERENCE_PATH = "wwwroot/user_preferences.json";
 
-        public IEnumerable<MovieDto> GetMovies()
+        public IEnumerable<MovieModel> GetMovies()
         {
-            var movies = new List<MovieDto>();
+            var movies = new List<MovieModel>();
 
             ReadFromMoviesDataset(movies);
             ReadFromCreditsDataset(movies);
@@ -29,21 +27,21 @@ namespace Whatflix.Domain.Manage
             return movies;
         }
 
-        public IEnumerable<UserPreferenceDto> GetUserPreferences()
+        public IEnumerable<UserPreferenceModel> GetUserPreferences()
         {
             return ReadFromUserPreferenceJson();
         }
 
         #region Private Methods
 
-        private List<UserPreferenceDto> ReadFromUserPreferenceJson()
+        private List<UserPreferenceModel> ReadFromUserPreferenceJson()
         {
             using (StreamReader streamReader = new StreamReader(USER_PREFERENCE_PATH))
             {
                 var content = streamReader.ReadToEnd();
                 var userPreferenceMappers = JsonConvert.DeserializeObject<List<UserPreferenceMapper>>(content);
                 var movies = GetMovies();
-                var userPreferences = new List<UserPreferenceDto>();
+                var userPreferences = new List<UserPreferenceModel>();
 
                 foreach (var userPreferenceMapper in userPreferenceMappers)
                 {
@@ -52,7 +50,7 @@ namespace Whatflix.Domain.Manage
                         userPreferenceMapper.FavoriteActors.Any(fa => m.Actors.Any(a => a == fa))
                     );
 
-                    var userPreference = new UserPreferenceDto
+                    var userPreference = new UserPreferenceModel
                     {
                         MovieIds = userMovies.Select(m => m.MovieId).ToList(),
                         UserId = userPreferenceMapper.UserId
@@ -65,7 +63,7 @@ namespace Whatflix.Domain.Manage
             }
         }
 
-        private void ReadFromCreditsDataset(List<MovieDto> movies)
+        private void ReadFromCreditsDataset(List<MovieModel> movies)
         {
             using (var reader = new StreamReader(CREDITS_PATH))
             using (var csv = new CsvReader(reader))
@@ -83,7 +81,7 @@ namespace Whatflix.Domain.Manage
             }
         }
 
-        private void ReadFromMoviesDataset(List<MovieDto> movies)
+        private void ReadFromMoviesDataset(List<MovieModel> movies)
         {
             using (var reader = new StreamReader(MOVIES_PATH))
             using (var csv = new CsvReader(reader))
@@ -91,7 +89,7 @@ namespace Whatflix.Domain.Manage
                 var records = csv.GetRecords<MovieMapper>();
                 foreach (var movieMapper in records)
                 {
-                    movies.Add(new MovieDto
+                    movies.Add(new MovieModel
                     {
                         MovieId = movieMapper.Id,
                         Language = GetLanguageFromCulture(movieMapper.OriginalLanguage)

@@ -11,7 +11,7 @@ using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Mongo.Repository
 {
-    public class MoviesMongoRepository : BaseMongoRepository<IMovie, MovieMdo>, IMovieRepository
+    public class MoviesMongoRepository : BaseMongoRepository<IMovieEntity, MovieMdo>, IMovieRepository
     {
         public const string COLLECTION_NAME = "movies";
         private IMapper _mapper;
@@ -21,7 +21,7 @@ namespace Whatflix.Data.Mongo.Repository
             _mapper = mapper;
         }
 
-        public async Task<List<IMovie>> SearchAsync(string[] searchWords)
+        public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords)
         {
             var actorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, searchWords);
             var titleFilter = Builders<MovieMdo>.Filter.In(f => f.Title, searchWords);
@@ -39,10 +39,10 @@ namespace Whatflix.Data.Mongo.Repository
             var movieCusror = await _collection.FindAsync(filterDefinition, findOptions);
             var mongoDataObjects = await movieCusror.ToListAsync();
 
-            return _mapper.Map<List<IMovie>>(mongoDataObjects);
+            return _mapper.Map<List<IMovieEntity>>(mongoDataObjects);
         }
 
-        public async Task<List<IMovie>> SearchAsync(string[] searchWords, List<int> movieIds)
+        public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords, List<int> movieIds)
         {
             var actorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, searchWords);
             var directorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, searchWords);
@@ -60,7 +60,7 @@ namespace Whatflix.Data.Mongo.Repository
             var movieCusror = await _collection.FindAsync(filterDefinition, findOptions);
             var mongoDataObjects = await movieCusror.ToListAsync();
 
-            return _mapper.Map<List<IMovie>>(mongoDataObjects);
+            return _mapper.Map<List<IMovieEntity>>(mongoDataObjects);
         }
 
         public async Task UpdatedAppeardInSearchAsync(List<int> movieIds)

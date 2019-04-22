@@ -8,6 +8,7 @@ using System.IO;
 using Whatflix.Infrastructure.Injection;
 using Whatflix.Infrastructure.Mapping;
 using Whatflix.Infrastructure.ServiceSettings;
+using Whatflix.Presentation.Api.Helpers;
 
 namespace Whatflix.Api
 {
@@ -30,6 +31,7 @@ namespace Whatflix.Api
         {
             services.AddMvc();
             services.Configure<SettingsWrapper>(Configuration);
+            services.AddScoped<DocumentsControllerHelper>();
 
             _injectionModule.ConfigureServices(services);
             _injectionModule.ConfigureRepositories(services, shouldUseMongoRepository: bool.Parse(Configuration["Repositories:UseMongoRepository"]));
