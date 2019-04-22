@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Whatflix.Infrastructure.Helpers
+namespace Whatflix.Infrastructure.Helpers.Mappers
 {
     public class UserPreferenceMapper
     {
@@ -9,7 +9,7 @@ namespace Whatflix.Infrastructure.Helpers
         public int UserId { get; set; }
 
         [JsonProperty("preferred_languages")]
-        public List<string> PreferedLanguages { get; set; }
+        public List<string> PreferredLanguages { get; set; }
 
         [JsonProperty("favourite_actors")]
         public List<string> FavoriteActors { get; set; }

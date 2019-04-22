@@ -7,7 +7,7 @@ namespace Whatflix.Data.Abstract.Repository
     public interface IMovieRepository
     {
         Task InsertMany(IEnumerable<IMovie> entities);
-        Task<List<IMovie>> Search(string[] searchWords);
-        Task<List<IMovie>> Search(string[] searchWords, string[] favoriteActors, string[] favoriteDirectors, string[] favoriteLanguages);
+        Task<List<IMovie>> SearchAsync(string[] searchWords);
+        Task<List<IMovie>> SearchAsync(string[] searchWords, List<int> movieIds);
     }
 }

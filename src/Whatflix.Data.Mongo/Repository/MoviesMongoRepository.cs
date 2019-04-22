@@ -20,7 +20,7 @@ namespace Whatflix.Data.Mongo.Repository
             _mapper = mapper;
         }
 
-        public async Task<List<IMovie>> Search(string[] searchWords)
+        public async Task<List<IMovie>> SearchAsync(string[] searchWords)
         {
             var actorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, searchWords);
             var titleFilter = Builders<MovieMdo>.Filter.In(f => f.Title, searchWords);
@@ -41,13 +41,13 @@ namespace Whatflix.Data.Mongo.Repository
             return _mapper.Map<List<IMovie>>(mongoDataObjects);
         }
 
-        public async Task<List<IMovie>> Search(string[] searchWords, string[] preferredActors, string[] preferredDirectors, string[] favoriteLanguages)
+        public async Task<List<IMovie>> SearchAsync(string[] searchWords, List<int> movieIds)
         {
-            var actorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, preferredActors);
-            var directorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, preferredDirectors);
-            var languageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, favoriteLanguages);
+            var actorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, searchWords);
+            var directorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, searchWords);
+            var movieFilter = Builders<MovieMdo>.Filter.In(f => f.MovieId, movieIds);
 
-            var filterDefinition = Builders<MovieMdo>.Filter.And(actorFilter, directorFilter, languageFilter);
+            var filterDefinition = Builders<MovieMdo>.Filter.And(actorFilter, directorFilter, movieFilter);
             var sortDefinition = Builders<MovieMdo>.Sort.Ascending(m => m.Title);
             var findOptions = new FindOptions<MovieMdo, MovieMdo>
             {

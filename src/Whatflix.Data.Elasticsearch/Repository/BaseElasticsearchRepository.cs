@@ -1,27 +1,35 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using Nest;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Elasticsearch.Repository
 {
     public class BaseElasticsearchRepository<TEntity, TDataObject> where TDataObject : class
     {
         protected readonly IElasticClient _client;
-        private readonly string _indexAlias;
         private readonly IMapper _mapper;
+        private readonly string _indexAlias;
 
-        public BaseElasticsearchRepository(ElasticsearchWrapper elasticsearchWrapper, IMapper mapper)
+        public BaseElasticsearchRepository(IOptions<SettingsWrapper> serviceSettings, string indexAlias, IMapper mapper)
         {
-            _client = elasticsearchWrapper.Client;
-            _indexAlias = elasticsearchWrapper.IndexAlias;
+            var settings = new ConnectionSettings(new Uri(serviceSettings.Value.Databases.Elasticsearch.ConnectionString));
+            settings.DefaultIndex(indexAlias);
+            settings.ThrowExceptions(alwaysThrow: true);
+            settings.PrettyJson();
+
+            _client = new ElasticClient(settings);
             _mapper = mapper;
+            _indexAlias = indexAlias;
         }
 
         public async Task InsertMany(IEnumerable<TEntity> entities)
         {
             var dataObjects = _mapper.Map<IEnumerable<TDataObject>>(entities);
-            await _client.IndexManyAsync(dataObjects);
+            var result = await _client.IndexManyAsync(dataObjects);
         }
     }
 }

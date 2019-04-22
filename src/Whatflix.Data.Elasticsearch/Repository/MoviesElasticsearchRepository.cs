@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using Nest;
 using System.Collections.Generic;
 using System.IO;
@@ -8,19 +9,21 @@ using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
 using Whatflix.Data.Elasticsearch.Ado.Movie;
+using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Elasticsearch.Repository
 {
     public class MoviesElasticsearchRepository : BaseElasticsearchRepository<IMovie, MovieAdo>, IMovieRepository
     {
         private readonly IMapper _mapper;
+        private const string INDEX_ALIAS_MOVIES = "whatflix-movies";
 
-        public MoviesElasticsearchRepository(ElasticsearchWrapper elasticsearchWrapper, IMapper mapper) : base(elasticsearchWrapper, mapper)
+        public MoviesElasticsearchRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper) : base(serviceSettings, INDEX_ALIAS_MOVIES, mapper)
         {
             _mapper = mapper;
         }
 
-        public async Task<List<IMovie>> Search(string[] searchWords)
+        public async Task<List<IMovie>> SearchAsync(string[] searchWords)
         {
             var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
                 .Query(query => query
@@ -51,23 +54,29 @@ namespace Whatflix.Data.Elasticsearch.Repository
             return _mapper.Map<List<IMovie>>(doucments);
         }
 
-        public async Task<List<IMovie>> Search(string[] searchWords, string[] preferredActors, string[] preferredDirectors, string[] favoriteLanguages)
+        public async Task<List<IMovie>> SearchAsync(string[] searchWords, List<int> movieIds)
         {
             var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
                 .Query(query => query
                     .Bool(b => b
-                        .Must(m => m
+                        .Should(m => m
                             .Terms(t => t
-                                .Terms(Resolve(preferredActors))
+                                .Terms(searchWords)
                                 .Field(f => f.Actors.Suffix("keyword"))
                             ), m => m
                             .Terms(t => t
-                                .Terms(Resolve(preferredDirectors))
+                                .Terms(searchWords)
                                 .Field(f => f.Director.Suffix("keyword"))
                             ), m => m
                             .Terms(t => t
-                                .Terms(Resolve(favoriteLanguages))
+                                .Terms(searchWords)
                                 .Field(f => f.Language.Suffix("keyword"))
+                            )
+                        )
+                        .Must(m => m
+                            .Terms(t => t
+                                .Terms(movieIds)
+                                .Field(f => f.MovieId)
                             )
                         )
                     )

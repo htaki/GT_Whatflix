@@ -30,16 +30,8 @@ namespace Whatflix.Presentation.Api.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest, "Searchtext cannot be empty.");
                 }
 
-                var searchWords = GetSearchWords(text);
-                var userPreference = await ManageUserPreference.Instance.GetUserPreferenceById(userId);
-
-                if (userPreference == null)
-                {
-                    return StatusCode((int)HttpStatusCode.NotFound, $"Could not find user preferences for for user with Id: {userId}");
-                }
-
-                var userMoviesTask = _manageMovie.Search(searchWords, userPreference);
-                var moviesTask = _manageMovie.Search(searchWords);
+                var userMoviesTask = _manageMovie.SearchAsync(GetSearchWords(text), userId);
+                var moviesTask = _manageMovie.SearchAsync(GetSearchWords(text));
                 var movieList = await Task.WhenAll(userMoviesTask, moviesTask);
 
                 return Ok(MapMovies(movieList));
@@ -51,15 +43,15 @@ namespace Whatflix.Presentation.Api.Controllers
         }
 
         [HttpGet("users")]
-        public IActionResult Get()
+        public IActionResult GetRecommendations()
         {
             return Ok();
         }
 
         private IEnumerable<string> MapMovies(List<MovieDto>[] movieList)
         {
-            var userPreferredMovies = movieList[0];
-            var otherMovies = movieList[1];
+            var userPreferredMovies = movieList[0] ?? new List<MovieDto>();
+            var otherMovies = movieList[1] ?? new List<MovieDto>();
             otherMovies = otherMovies.Where(o => !userPreferredMovies.Any(u => o.Title == u.Title)).ToList();
 
             return userPreferredMovies.Select(m => m.Title).Concat(otherMovies.Select(m => m.Title));

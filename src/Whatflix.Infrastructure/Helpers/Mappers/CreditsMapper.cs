@@ -1,6 +1,6 @@
 ﻿using CsvHelper.Configuration.Attributes;
 
-namespace Whatflix.Infrastructure.Helpers
+namespace Whatflix.Infrastructure.Helpers.Mappers
 {
     public class CreditsMapper
     {

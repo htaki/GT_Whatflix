@@ -1,36 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Whatflix.Data.Abstract.Repository;
+using Whatflix.Data.Abstract.Settings.Elasticsearch;
 
 namespace Whatflix.Domain.Manage
 {
     public class ManageElasticsearch
     {
-        IElasticsearchSettingsRepository _elasticsearchSettingsRepository;
+        IElasticsearchIndex _elasticsearchIndex;
 
-        public ManageElasticsearch(IElasticsearchSettingsRepository elasticsearchSettingsRepository)
+        public ManageElasticsearch(IElasticsearchIndex elasticsearchIndex)
         {
-            _elasticsearchSettingsRepository = elasticsearchSettingsRepository;
+            _elasticsearchIndex = elasticsearchIndex;
         }
 
-        public async Task CreateIndexAsync()
+        public async Task CreateIndexAsync(string indexAlias)
         {
-            await _elasticsearchSettingsRepository.CreateIndexAsync();
+            await _elasticsearchIndex.CreateIndexAsync(indexAlias);
         }
 
-        public async Task<IEnumerable<string>> GetIndicesAsync()
+        public async Task<IEnumerable<string>> GetIndicesAsync(string indexAlias)
         {
-            return await _elasticsearchSettingsRepository.GetIndicesAsync();
+            return await _elasticsearchIndex.GetIndicesAsync(indexAlias);
         }
 
-        public async Task SetIndexAsync(string index)
+        public async Task SetIndexAsync(string index, string indexAlias)
         {
-            await _elasticsearchSettingsRepository.SetIndexAsync(index);
+            await _elasticsearchIndex.SetIndexAsync(index, indexAlias);
         }
 
         public async Task DeleteIndexAsync(string index)
         {
-            await _elasticsearchSettingsRepository.DeleteIndexAsync(index);
+            await _elasticsearchIndex.DeleteIndexAsync(index);
         }
     }
 }

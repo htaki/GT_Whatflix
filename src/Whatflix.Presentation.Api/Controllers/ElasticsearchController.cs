@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Whatflix.Domain.Manage;
+using Whatflix.Infrastructure.Helpers.Constants;
 
 namespace Whatflix.Presentation.Api.Controllers
 {
@@ -17,12 +18,12 @@ namespace Whatflix.Presentation.Api.Controllers
             _manageElasticsearch = manageElasticsearch;
         }
 
-        [HttpGet("index")]
-        public async Task<IActionResult> GetIndices()
+        [HttpGet("movies/index")]
+        public async Task<IActionResult> GetMoviesIndices()
         {
             try
             {
-                return Ok(await _manageElasticsearch.GetIndicesAsync());
+                return Ok(await _manageElasticsearch.GetIndicesAsync(IndexConstant.INDEX_ALIAS_MOVIES));
             }
             catch (Exception ex)
             {
@@ -30,12 +31,12 @@ namespace Whatflix.Presentation.Api.Controllers
             }
         }
 
-        [HttpPost("index")]
-        public async Task<IActionResult> CreateIndex()
+        [HttpPost("movies/index")]
+        public async Task<IActionResult> CreateMoviesIndex()
         {
             try
             {
-                await _manageElasticsearch.CreateIndexAsync();
+                await _manageElasticsearch.CreateIndexAsync(IndexConstant.INDEX_ALIAS_MOVIES);
                 return Ok();
             }
             catch (Exception ex)
@@ -44,12 +45,53 @@ namespace Whatflix.Presentation.Api.Controllers
             }
         }
 
-        [HttpPut("index")]
-        public async Task<IActionResult> SetIndex(string index)
+        [HttpPut("movies/index")]
+        public async Task<IActionResult> SetMoviesIndex(string index)
         {
             try
             {
-                await _manageElasticsearch.SetIndexAsync(index);
+                await _manageElasticsearch.SetIndexAsync(index, IndexConstant.INDEX_ALIAS_MOVIES);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("user-preferences/index")]
+        public async Task<IActionResult> GetUserPreferenceIndices()
+        {
+            try
+            {
+                return Ok(await _manageElasticsearch.GetIndicesAsync(IndexConstant.INDEX_ALIAS_USER_PREFERENCES));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPost("user-preferences/index")]
+        public async Task<IActionResult> CreateUserPreferencesIndex()
+        {
+            try
+            {
+                await _manageElasticsearch.CreateIndexAsync(IndexConstant.INDEX_ALIAS_USER_PREFERENCES);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPut("user-preferences/index")]
+        public async Task<IActionResult> SetUserPreferencesIndex(string index)
+        {
+            try
+            {
+                await _manageElasticsearch.SetIndexAsync(index, IndexConstant.INDEX_ALIAS_USER_PREFERENCES);
                 return Ok();
             }
             catch (Exception ex)

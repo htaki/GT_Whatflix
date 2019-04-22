@@ -1,11 +1,12 @@
 ﻿using Nest;
 using Whatflix.Data.Elasticsearch.Ado.Movie;
+using Whatflix.Data.Mongo.Ado.UserPreference;
 
-namespace Whatflix.Data.Elasticsearch
+namespace Whatflix.Data.Elasticsearch.Settings
 {
     public class AnalyzedMapping
     {
-        public static CreateIndexDescriptor IndexDescriptor(CreateIndexDescriptor createIndexDescriptor)
+        public static CreateIndexDescriptor MoviesIndexDescriptor(CreateIndexDescriptor createIndexDescriptor)
         {
             return createIndexDescriptor
                 .Settings(settings => settings
@@ -73,6 +74,29 @@ namespace Whatflix.Data.Elasticsearch
                                 )
                             )
                         )
+                    )
+                );
+        }
+
+        public static CreateIndexDescriptor UserPreferencesIndexDescriptor(CreateIndexDescriptor createIndexDescriptor)
+        {
+            return createIndexDescriptor
+                .Settings(settings => settings
+                    .NumberOfShards(4)
+                    .NumberOfReplicas(3)
+                    .Setting("index.max_result_window", int.MaxValue)
+                    .Analysis(analysis => analysis
+                        .Analyzers(a => a
+                            .Custom("text_analyzer", s => s
+                                .Tokenizer("standard")
+                                .Filters("lowercase", "asciifolding")
+                            )
+                        )
+                    )
+                )
+                .Mappings(mappings => mappings
+                    .Map<UserPreferenceAdo>(m => m
+                        .AutoMap()
                     )
                 );
         }

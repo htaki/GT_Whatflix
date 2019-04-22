@@ -1,63 +1,44 @@
 ﻿using AutoMapper;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
 using Whatflix.Domain.Dto.Movie;
-using Whatflix.Domain.Dto.UserPreference;
 
 namespace Whatflix.Domain.Manage
 {
     public class ManageMovie
     {
         private readonly IMovieRepository _moviesRepository;
+        private readonly IUserPreferenceRepository _userPreferenceRepository;
         private IMapper _mapper;
 
         public ManageMovie(IMovieRepository moviesRepository,
+            IUserPreferenceRepository userPreferenceRepository,
             IMapper mapper)
         {
             _moviesRepository = moviesRepository;
+            _userPreferenceRepository = userPreferenceRepository;
             _mapper = mapper;
         }
 
         public async Task InsertMany(IEnumerable<MovieDto> movieDtos)
         {
-            var movies = _mapper.Map<IEnumerable<IMovie>>(movieDtos);
-            await _moviesRepository.InsertMany(movies);
+            await _moviesRepository.InsertMany(_mapper.Map<IEnumerable<IMovie>>(movieDtos));
         }
 
-        public async Task<List<MovieDto>> Search(string[] searchWords, UserPreferenceDto userPreference)
+        public async Task<List<MovieDto>> SearchAsync(string[] searchWords, int userId)
         {
-            var movieObjects = await _moviesRepository.Search(searchWords,
-                GetPreferredActors(searchWords, userPreference),
-                GetPreferredDirectors(searchWords, userPreference),
-                userPreference.PreferredLanguages);
+            var userPreference = await _userPreferenceRepository.GetMovieIdsByUserIdAsync(userId);
+            var movieObjects = await _moviesRepository.SearchAsync(searchWords, userPreference);
 
             return _mapper.Map<List<MovieDto>>(movieObjects);
         }
 
-        public async Task<List<MovieDto>> Search(string[] searchWords)
+        public async Task<List<MovieDto>> SearchAsync(string[] searchWords)
         {
-            var movieObjects = await _moviesRepository.Search(searchWords);
+            var movieObjects = await _moviesRepository.SearchAsync(searchWords);
             return _mapper.Map<List<MovieDto>>(movieObjects);
-        }
-
-        private string[] GetPreferredActors(string[] searchWords, UserPreferenceDto userPreference)
-        {
-            return searchWords
-                .Where(sw => userPreference.FavoriteActors
-                .Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)))
-                .ToArray();
-        }
-
-        private string[] GetPreferredDirectors(string[] searchWords, UserPreferenceDto userPreference)
-        {
-            return searchWords
-                .Where(sw => userPreference.FavoriteDirectors
-                .Any(p => string.Equals(p, sw, StringComparison.OrdinalIgnoreCase)))
-                .ToArray();
         }
     }
 }
