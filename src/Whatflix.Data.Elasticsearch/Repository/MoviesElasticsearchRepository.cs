@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
 using Nest;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,25 +25,22 @@ namespace Whatflix.Data.Elasticsearch.Repository
 
         public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords)
         {
-            var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
-                .Query(query => query
-                    .Bool(b => b
-                        .Should(sh => sh
-                            .Terms(t => t
-                                .Terms(searchWords)
-                                .Field(f => f.Actors.Suffix("keyword"))
-                            ), sh => sh
-                            .Terms(t => t
-                                .Terms(searchWords)
-                                .Field(f => f.Director.Suffix("keyword"))
-                            ), sh => sh
-                            .Terms(t => t
-                                .Terms(searchWords)
-                                .Field(f => f.Title.Suffix("keyword"))
-                            )
-                        )
+            var multiMatchContainer = new QueryContainer();
+
+            foreach (var searchWord in searchWords)
+            {
+                multiMatchContainer |= new QueryContainerDescriptor<MovieAdo>().MultiMatch(m => m
+                    .Query(searchWord)
+                    .Fields(fs => fs
+                        .Field(f => f.Director.Suffix("keyword"))
+                        .Field(f => f.Title.Suffix("keyword"))
+                        .Field(f => f.Actors.Suffix("keyword"))
                     )
-                )
+                );
+            }
+
+            var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
+                .Query(query => multiMatchContainer)
                 .Sort(so => so
                     .Ascending(f => f.Title.Suffix("keyword"))
                 )
@@ -61,32 +57,53 @@ namespace Whatflix.Data.Elasticsearch.Repository
             return _mapper.Map<List<IMovieEntity>>(doucments);
         }
 
-        public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords, List<int> movieIds)
+        public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords, 
+            List<string> favoriteActors, 
+            List<string> favoriteDirectors, 
+            List<string> favoriteLanguages)
         {
-            Func<QueryContainerDescriptor<MovieAdo>, QueryContainer> searchQuery = query => query
-                .Bool(b => b
-                    .Should(m => m
-                        .Terms(t => t
-                            .Terms(searchWords)
-                            .Field(f => f.Actors.Suffix("keyword"))
-                        ), m => m
-                        .Terms(t => t
-                            .Terms(searchWords)
-                            .Field(f => f.Director.Suffix("keyword"))
-                        ), m => m
-                        .Terms(t => t
-                            .Terms(searchWords)
-                            .Field(f => f.Language.Suffix("keyword"))
-                        )
-                    )
-                    .MinimumShouldMatch(MinimumShouldMatch.Fixed(1))
-                    .Must(m => m
-                        .Terms(t => t
-                            .Terms(movieIds)
-                            .Field(f => f.MovieId)
-                        )
+            var searchWordsContainer = new QueryContainer();
+
+            foreach (var searchWord in searchWords)
+            {
+                searchWordsContainer |= new QueryContainerDescriptor<MovieAdo>().MultiMatch(m => m
+                    .Query(searchWord)
+                    .Fields(fs => fs
+                        .Field(f => f.Director.Suffix("keyword"))
+                        .Field(f => f.Title.Suffix("keyword"))
+                        .Field(f => f.Actors.Suffix("keyword"))
                     )
                 );
+            }
+
+            QueryContainer searchQuery(QueryContainerDescriptor<MovieAdo> query) => query
+                .Bool(b => b
+                        .Must(m_ => m_
+                            .Bool(b2 => b2
+                                .Should(s => s
+                                    .Terms(t => t
+                                        .Terms(favoriteActors)
+                                        .Field(f => f.Actors.Suffix("keyword"))
+                                    ), s => s
+                                    .Terms(t => t
+                                        .Terms(favoriteDirectors)
+                                        .Field(f => f.Director.Suffix("keyword"))
+                                    )
+                                )
+                                .MinimumShouldMatch(MinimumShouldMatch.Fixed(1))
+                            ), m1 => m1
+                            .Bool(b1 => b1
+                                .Should(m2 => m2
+                                    .Terms(t => t
+                                        .Terms(favoriteLanguages)
+                                        .Field(f => f.Language.Suffix("keyword"))
+                                    )
+                                )
+                                .MinimumShouldMatch(MinimumShouldMatch.Fixed(1))
+                            ), m1 => m1
+                        )
+                        .Filter(searchWordsContainer)
+                    );
 
             var debugQuery = GetRawQueryForDebug(new SearchDescriptor<MovieAdo>().Query(searchQuery));
 
@@ -107,6 +124,8 @@ namespace Whatflix.Data.Elasticsearch.Repository
             var doucments = searchResponse.Documents;
             return _mapper.Map<List<IMovieEntity>>(doucments);
         }
+
+
 
         public async Task UpdatedAppeardInSearchAsync(List<int> movieIds)
         {
@@ -153,6 +172,23 @@ namespace Whatflix.Data.Elasticsearch.Repository
                 _client.RequestResponseSerializer.Serialize(query, memoryStream);
                 return Encoding.ASCII.GetString(memoryStream.ToArray());
             }
+        }
+
+        private string GetSearchQuery(List<string> searchWords)
+        {
+            var searchQuery = "";
+
+            for (int i = 0; i < searchWords.Count; i++)
+            {
+                searchQuery += "\"" + searchWords[i] + "\"";
+
+                if (i < searchWords.Count - 1)
+                {
+                    searchQuery += " ";
+                }
+            }
+
+            return searchQuery;
         }
     }
 }

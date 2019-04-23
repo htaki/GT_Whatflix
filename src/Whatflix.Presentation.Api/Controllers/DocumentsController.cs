@@ -15,19 +15,16 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class DocumentsController : ControllerBase
     {
-        private readonly DocumentsControllerHelper _documentsControllerHelper;
+        private readonly ControllerHelper _controllerHelper;
         private readonly Movie _manageMovie;
-        private readonly UserPreference _manageUserPreference;
         private readonly IMapper _mapper;
 
         public DocumentsController(Movie moviesRepository,
-            UserPreference manageUserPreference,
-            DocumentsControllerHelper documentsControllerHelper,
+            ControllerHelper controllerHelper,
             IMapper mapper)
         {
-            _documentsControllerHelper = documentsControllerHelper;
+            _controllerHelper = controllerHelper;
             _manageMovie = moviesRepository;
-            _manageUserPreference = manageUserPreference;
             _mapper = mapper;
         }
 
@@ -36,24 +33,8 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                var movies = _documentsControllerHelper.GetMovies();
+                var movies = _controllerHelper.GetMovies();
                 await _manageMovie.InsertMany(_mapper.Map<IEnumerable<MovieDto>>(movies));
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
-
-        [HttpPut("replicate/user-preferences")]
-        public async Task<IActionResult> ReplicateUserPreferences()
-        {
-            try
-            {
-                var userPreferences = _documentsControllerHelper.GetUserPreferences();
-                await _manageUserPreference.InsertMany(_mapper.Map<IEnumerable<UserPreferenceDto>>(userPreferences));
-
                 return Ok();
             }
             catch (Exception ex)

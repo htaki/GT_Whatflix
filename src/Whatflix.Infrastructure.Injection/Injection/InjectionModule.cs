@@ -13,7 +13,6 @@ namespace Whatflix.Infrastructure.Injection
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<Movie>();
-            services.AddScoped<UserPreference>();
             services.AddScoped<ElasticsearchWrapper>();
             services.AddScoped<Domain.Manage.Elasticsearch>();
             services.AddScoped<IElasticsearchIndex, ElasticsearchIndex>();
@@ -24,12 +23,10 @@ namespace Whatflix.Infrastructure.Injection
             if (shouldUseMongoRepository)
             {
                 services.AddScoped<IMovieRepository, MoviesMongoRepository>();
-                services.AddScoped<IUserPreferenceRepository, UserPreferencesMongoRepository>();
                 return;
             }
 
             services.AddTransient<IMovieRepository, MoviesElasticsearchRepository>();
-            services.AddTransient<IUserPreferenceRepository, UserPreferencesElasticsearchRepository>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,15 +13,12 @@ namespace Whatflix.Domain.Manage
     public class Movie
     {
         private readonly IMovieRepository _moviesRepository;
-        private readonly IUserPreferenceRepository _userPreferenceRepository;
         private IMapper _mapper;
 
         public Movie(IMovieRepository moviesRepository,
-            IUserPreferenceRepository userPreferenceRepository,
             IMapper mapper)
         {
             _moviesRepository = moviesRepository;
-            _userPreferenceRepository = userPreferenceRepository;
             _mapper = mapper;
         }
 
@@ -29,11 +27,10 @@ namespace Whatflix.Domain.Manage
             await _moviesRepository.InsertMany(_mapper.Map<IEnumerable<IMovieEntity>>(movieDtos));
         }
 
-        public async Task<List<MovieDto>> SearchAsync(string[] searchWords, int userId)
+        public async Task<List<MovieDto>> SearchAsync(string[] searchWords, UserPreferenceDto userPreference)
         {
-            var userPreference = await _userPreferenceRepository.GetMovieIdsByUserIdAsync(userId);
-            var movieObjects = await _moviesRepository.SearchAsync(searchWords, userPreference);
-
+            var movieObjects = await _moviesRepository.SearchAsync(searchWords, 
+                userPreference.FavoriteActors, userPreference.FavoriteDirectors, userPreference.PreferredLanguages);
             return _mapper.Map<List<MovieDto>>(movieObjects);
         }
 
@@ -50,20 +47,24 @@ namespace Whatflix.Domain.Manage
 
         public async Task<List<RecommendationsDto>> GetRecommendationsAsync()
         {
-            var userPreferences = await _userPreferenceRepository.GetUserPreferences();
-            var recommendations = new List<RecommendationsDto>();
-
-            foreach (var userPreference in userPreferences)
-            {
-                var recommendedMovies = await _moviesRepository.GetRecommendationByMovieIdsAsync(userPreference.MovieIds);
-                recommendations.Add(new RecommendationsDto
-                {
-                    Movies = recommendedMovies.OrderBy(o => o),
-                    User = userPreference.UserId
-                });
-            }
-
-            return recommendations;
+            throw new NotImplementedException();
         }
+
+        //public async Task<List<RecommendationsDto>> GetRecommendationsAsync(List<UserPreferenceDto> userPreferences)
+        //{
+        //    var recommendations = new List<RecommendationsDto>();
+
+        //    foreach (var userPreference in userPreferences)
+        //    {
+        //        var recommendedMovies = await _moviesRepository.GetRecommendationByMovieIdsAsync(userPreferences);
+        //        recommendations.Add(new RecommendationsDto
+        //        {
+        //            Movies = recommendedMovies.OrderBy(o => o),
+        //            User = userPreference.UserId
+        //        });
+        //    }
+
+        //    return recommendations;
+        //}
     }
 }

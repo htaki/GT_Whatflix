@@ -11,11 +11,12 @@ using Whatflix.Presentation.Api.Models;
 
 namespace Whatflix.Presentation.Api.Helpers
 {
-    public class DocumentsControllerHelper
+    public class ControllerHelper
     {
         private const string CREDITS_PATH = "wwwroot/tmdb_5000_credits.csv";
         private const string MOVIES_PATH = "wwwroot/tmdb_5000_movies.csv";
         private const string USER_PREFERENCE_PATH = "wwwroot/user_preferences.json";
+        private static List<UserPreferenceModel> _userPreferenceModels;
 
         public IEnumerable<MovieModel> GetMovies()
         {
@@ -32,35 +33,25 @@ namespace Whatflix.Presentation.Api.Helpers
             return ReadFromUserPreferenceJson();
         }
 
+        public UserPreferenceModel GetUserPreferencesByUserId(int userId)
+        {
+            return ReadFromUserPreferenceJson().FirstOrDefault(f => f.UserId == userId);
+        }
+
         #region Private Methods
 
         private List<UserPreferenceModel> ReadFromUserPreferenceJson()
         {
-            using (StreamReader streamReader = new StreamReader(USER_PREFERENCE_PATH))
+            if (_userPreferenceModels == null)
             {
-                var content = streamReader.ReadToEnd();
-                var userPreferenceMappers = JsonConvert.DeserializeObject<List<UserPreferenceMapper>>(content);
-                var movies = GetMovies();
-                var userPreferences = new List<UserPreferenceModel>();
-
-                foreach (var userPreferenceMapper in userPreferenceMappers)
+                using (StreamReader streamReader = new StreamReader(USER_PREFERENCE_PATH))
                 {
-                    var userMovies = movies.Where(m => userPreferenceMapper.PreferredLanguages.Any(l => m.Language == l));
-                    userMovies = userMovies.Where(m => userPreferenceMapper.FavoriteDirectors.Any(d => m.Director == d) ||
-                        userPreferenceMapper.FavoriteActors.Any(fa => m.Actors.Any(a => a == fa))
-                    );
-
-                    var userPreference = new UserPreferenceModel
-                    {
-                        MovieIds = userMovies.Select(m => m.MovieId).ToList(),
-                        UserId = userPreferenceMapper.UserId
-                    };
-
-                    userPreferences.Add(userPreference);
+                    var content = streamReader.ReadToEnd();
+                    _userPreferenceModels = JsonConvert.DeserializeObject<List<UserPreferenceModel>>(content);
                 }
-
-                return userPreferences;
             }
+
+            return _userPreferenceModels;
         }
 
         private void ReadFromCreditsDataset(List<MovieModel> movies)

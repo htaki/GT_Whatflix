@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Whatflix.Domain.Dto.Movie;
+using Whatflix.Domain.Dto.UserPreference;
 using Whatflix.Domain.Manage;
+using Whatflix.Presentation.Api.Helpers;
 
 namespace Whatflix.Presentation.Api.Controllers
 {
@@ -13,11 +16,15 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        Movie _manageMovie;
+        private readonly Movie _manageMovie;
+        private readonly ControllerHelper _controllerHelper;
+        private readonly IMapper _mapper;
 
-        public MoviesController(Movie manageMovie)
+        public MoviesController(Movie manageMovie, ControllerHelper controllerHelper, IMapper mapper)
         {
             _manageMovie = manageMovie;
+            _controllerHelper = controllerHelper;
+            _mapper = mapper;
         }
 
         [HttpGet("user/{userId}/search")]
@@ -27,10 +34,17 @@ namespace Whatflix.Presentation.Api.Controllers
             {
                 if (string.IsNullOrEmpty(text))
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, "Searchtext cannot be empty.");
+                    return StatusCode((int)HttpStatusCode.BadRequest, "Search text cannot be empty.");
                 }
 
-                var userMoviesTask = _manageMovie.SearchAsync(GetSearchWords(text), userId);
+                var userPreference = _controllerHelper.GetUserPreferencesByUserId(userId);
+
+                if (userPreference == null)
+                {
+
+                }
+
+                var userMoviesTask = _manageMovie.SearchAsync(GetSearchWords(text), _mapper.Map<UserPreferenceDto>(userPreference));
                 var moviesTask = _manageMovie.SearchAsync(GetSearchWords(text));
                 var movieList = await Task.WhenAll(userMoviesTask, moviesTask);
 

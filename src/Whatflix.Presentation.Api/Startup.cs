@@ -31,7 +31,7 @@ namespace Whatflix.Api
         {
             services.AddMvc();
             services.Configure<SettingsWrapper>(Configuration);
-            services.AddScoped<DocumentsControllerHelper>();
+            services.AddScoped<ControllerHelper>();
 
             _injectionModule.ConfigureServices(services);
             _injectionModule.ConfigureRepositories(services, shouldUseMongoRepository: bool.Parse(Configuration["Repositories:UseMongoRepository"]));
