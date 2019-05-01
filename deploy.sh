@@ -1,7 +1,12 @@
 #!/bin/bash
 
-cd ./src/whatflix.presentation.api
+cd ./src
+echo "Executing tests.."
+dotnet test
+echo "Deploying.."
+cd ./whatflix.presentation.api
 rm -rf ./bin/output
+
 dotnet publish -c Release -o ./bin/output
 docker build -t whatflix .
 docker tag whatflix registry.heroku.com/whatflix/web
