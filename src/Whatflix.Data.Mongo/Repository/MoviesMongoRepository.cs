@@ -13,12 +13,10 @@ namespace Whatflix.Data.Mongo.Repository
     public class MoviesMongoRepository : BaseMongoRepository<IMovieEntity, MovieMdo>, IMovieRepository
     {
         public const string COLLECTION_NAME = "movies";
-        private IMapper _mapper;
 
         public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings, 
             IMapper mapper) : base(serviceSettings, mapper, COLLECTION_NAME)
         {
-            _mapper = mapper;
         }
 
         public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords)
@@ -31,8 +29,7 @@ namespace Whatflix.Data.Mongo.Repository
                 Projection = Builders<MovieMdo>.Projection.Include(p => p.Title)
             };
 
-            var mongoDataObjects = await FindAsync(filterDefinition, findOptions);
-            return _mapper.Map<List<IMovieEntity>>(mongoDataObjects);
+            return await FindAsync(filterDefinition, findOptions);
         }
 
         public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords,
@@ -52,8 +49,7 @@ namespace Whatflix.Data.Mongo.Repository
                 Projection = Builders<MovieMdo>.Projection.Include(p => p.Title)
             };
 
-            var mongoDataObjects = await FindAsync(filterDefinition, findOptions);
-            return _mapper.Map<List<IMovieEntity>>(mongoDataObjects);
+            return await FindAsync(filterDefinition, findOptions);
         }
 
         public async Task UpdateAppeardInSearchAsync(List<int> movieIds)
@@ -77,8 +73,7 @@ namespace Whatflix.Data.Mongo.Repository
                 Limit = 3
             };
 
-            var mongoDataObjects = await FindAsync(filterDefinition, findOptions);
-            return _mapper.Map<List<IMovieEntity>>(mongoDataObjects);
+            return await FindAsync(filterDefinition, findOptions);
         }
 
         #region Private Methods
