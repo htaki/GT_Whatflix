@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Whatflix.Domain.Manage;
 using Whatflix.Infrastructure.Helpers.Constants;
 
 namespace Whatflix.Presentation.Api.Controllers
@@ -10,9 +11,9 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class ElasticsearchController : ControllerBase
     {
-        private readonly Domain.Manage.Elasticsearch _manageElasticsearch;
+        private readonly ES _manageElasticsearch;
 
-        public ElasticsearchController(Domain.Manage.Elasticsearch manageElasticsearch)
+        public ElasticsearchController(Domain.Manage.ES manageElasticsearch)
         {
             _manageElasticsearch = manageElasticsearch;
         }

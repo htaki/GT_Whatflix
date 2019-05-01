@@ -13,9 +13,9 @@ namespace Whatflix.Infrastructure.Injection
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IMovie, Movie>();
+            services.AddScoped<ES>();
             services.AddScoped<ElasticsearchWrapper>();
-            services.AddScoped<Domain.Manage.Elasticsearch>();
+            services.AddScoped<IMovie, Movie>();
             services.AddScoped<IElasticsearchIndex, ElasticsearchIndex>();
         }
 
