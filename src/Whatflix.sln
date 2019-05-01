@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Whatflix.Domain.Abstract", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatflix.Data.Mongo.Test", "Whatflix.Data.Mongo.Test\Whatflix.Data.Mongo.Test.csproj", "{A1900C6E-3473-4E13-822C-C3A7F8D0D3C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatflix.Data.Elasticsearch.Test", "Whatflix.Data.Elasticsearch.Test\Whatflix.Data.Elasticsearch.Test.csproj", "{A4C81E18-B0EE-4AAA-B50C-E6BBDEA5EC01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{A1900C6E-3473-4E13-822C-C3A7F8D0D3C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1900C6E-3473-4E13-822C-C3A7F8D0D3C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1900C6E-3473-4E13-822C-C3A7F8D0D3C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4C81E18-B0EE-4AAA-B50C-E6BBDEA5EC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C81E18-B0EE-4AAA-B50C-E6BBDEA5EC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C81E18-B0EE-4AAA-B50C-E6BBDEA5EC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C81E18-B0EE-4AAA-B50C-E6BBDEA5EC01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{7BA18848-0946-4848-BC5E-11DE8A129B8F} = {ACF17020-352F-45EB-A3E7-917A05937485}
 		{FAE7CAAC-99BD-4189-AEBD-EC07B4F86E9F} = {8E2F591C-A705-4DDA-B171-B5F5157E67CA}
 		{A1900C6E-3473-4E13-822C-C3A7F8D0D3C5} = {ACF17020-352F-45EB-A3E7-917A05937485}
+		{A4C81E18-B0EE-4AAA-B50C-E6BBDEA5EC01} = {ACF17020-352F-45EB-A3E7-917A05937485}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F3E796-4C69-4EF3-BC94-B774F2C4D7FC}
