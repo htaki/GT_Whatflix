@@ -37,7 +37,6 @@ namespace Whatflix.Data.Mongo.Repository
             List<string> favoriteDirectors,
             List<string> preferredLanguages)
         {
-
             var searchFilter = GetSearchWordsFilter(searchWords);
             var userPreferenceFilter = GetUserPreferenceFilter(favoriteActors, favoriteDirectors, preferredLanguages);
             var filterDefinition = Builders<MovieMdo>.Filter.And(searchFilter, userPreferenceFilter);

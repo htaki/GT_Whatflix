@@ -8,7 +8,7 @@ using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Elasticsearch.Repository
 {
-    public class BaseElasticsearchRepository<TEntity, TDataObject> where TDataObject : class
+    public abstract class BaseElasticsearchRepository<TEntity, TDataObject> where TDataObject : class
     {
         protected readonly IElasticClient _client;
         private readonly IMapper _mapper;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Whatflix.Infrastructure.Helpers.Constants;
@@ -8,7 +9,7 @@ using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Mongo.Repository
 {
-    public class BaseMongoRepository<TEntity, TDataObject>
+    public abstract class BaseMongoRepository<TEntity, TDataObject>
     {
         private IMapper _mapper;
         private IMongoClient _client;
@@ -26,11 +27,16 @@ namespace Whatflix.Data.Mongo.Repository
 
         public async Task InsertMany(IEnumerable<TEntity> entities)
         {
+            if (entities == null)
+            {
+                throw new ArgumentNullException(nameof(entities));
+            }
+
             var mongoDataObjects = _mapper.Map<IEnumerable<TDataObject>>(entities);
             await _collection.InsertManyAsync(mongoDataObjects);
         }
 
-        public async Task<List<TEntity>> FindAsync(FilterDefinition<TDataObject> filterDefinition,
+        protected async Task<List<TEntity>> FindAsync(FilterDefinition<TDataObject> filterDefinition,
             FindOptions<TDataObject, TDataObject> findOptions)
         {
             var cursor = await _collection.FindAsync(filterDefinition, findOptions);
