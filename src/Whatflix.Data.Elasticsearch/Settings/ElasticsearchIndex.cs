@@ -21,7 +21,7 @@ namespace Whatflix.Data.Elasticsearch.Settings
         {
             string index = GenerateIndex(indexAlias);
 
-            if (IndexConstant.INDEX_ALIAS_MOVIES == indexAlias)
+            if (WhatflixConstants.DATABASE_NAME == indexAlias)
             {
                 return await _elasticsearchWrapper.GetClient(indexAlias).CreateIndexAsync(index, AnalyzedMapping.MoviesIndexDescriptor);
             }

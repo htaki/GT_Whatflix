@@ -3,12 +3,12 @@ using Microsoft.Extensions.Options;
 using Nest;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
 using Whatflix.Data.Elasticsearch.Ado.Movie;
+using Whatflix.Infrastructure.Helpers.Constants;
 using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Elasticsearch.Repository
@@ -16,9 +16,8 @@ namespace Whatflix.Data.Elasticsearch.Repository
     public class MoviesElasticsearchRepository : BaseElasticsearchRepository<IMovieEntity, MovieAdo>, IMovieRepository
     {
         private readonly IMapper _mapper;
-        private const string INDEX_ALIAS_MOVIES = "whatflix-movies";
 
-        public MoviesElasticsearchRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper) : base(serviceSettings, INDEX_ALIAS_MOVIES, mapper)
+        public MoviesElasticsearchRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper) : base(serviceSettings, WhatflixConstants.DATABASE_NAME, mapper)
         {
             _mapper = mapper;
         }

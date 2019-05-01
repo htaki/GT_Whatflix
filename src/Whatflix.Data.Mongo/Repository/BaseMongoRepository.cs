@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Whatflix.Infrastructure.Helpers.Constants;
 using Whatflix.Infrastructure.ServiceSettings;
 
 namespace Whatflix.Data.Mongo.Repository
@@ -18,7 +19,7 @@ namespace Whatflix.Data.Mongo.Repository
         public BaseMongoRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper, string collectionName)
         {
             _client = new MongoClient(serviceSettings.Value.Databases.MongoDb.ConnectionString);
-            _database = _client.GetDatabase("whatflix");
+            _database = _client.GetDatabase(WhatflixConstants.DATABASE_NAME);
             _collection = _database.GetCollection<TDataObject>(collectionName);
             _mapper = mapper;
         }
@@ -27,15 +28,6 @@ namespace Whatflix.Data.Mongo.Repository
         {
             var mongoDataObjects = _mapper.Map<IEnumerable<TDataObject>>(entities);
             await _collection.InsertManyAsync(mongoDataObjects);
-        }
-
-        public async Task<IEnumerable<TEntity>> GetUserPreferences()
-        {
-            var filterDefinition = Builders<TDataObject>.Filter.Empty;
-            var cursor = await _collection.FindAsync(filterDefinition);
-            var mongoDataObjects = await cursor.ToListAsync();
-
-            return _mapper.Map<IEnumerable<TEntity>>(mongoDataObjects);
         }
     }
 }

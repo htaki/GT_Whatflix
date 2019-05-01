@@ -31,17 +31,5 @@ namespace Whatflix.Data.Elasticsearch.Repository
             var dataObjects = _mapper.Map<IEnumerable<TDataObject>>(entities);
             var result = await _client.IndexManyAsync(dataObjects);
         }
-
-        public async Task<IEnumerable<TEntity>> GetUserPreferences()
-        {
-            var searchResponse = await _client.SearchAsync<TDataObject>(q => q
-                .Query(query => query
-                    .MatchAll()
-                )
-            );
-
-            var dataObjects = searchResponse.Documents;
-            return _mapper.Map<IEnumerable<TEntity>>(dataObjects);
-        }
     }
 }

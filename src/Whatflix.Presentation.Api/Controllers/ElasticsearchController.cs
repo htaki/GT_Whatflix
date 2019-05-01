@@ -2,7 +2,6 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Whatflix.Domain.Manage;
 using Whatflix.Infrastructure.Helpers.Constants;
 
 namespace Whatflix.Presentation.Api.Controllers
@@ -23,7 +22,7 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                return Ok(await _manageElasticsearch.GetIndicesAsync(IndexConstant.INDEX_ALIAS_MOVIES));
+                return Ok(await _manageElasticsearch.GetIndicesAsync(WhatflixConstants.DATABASE_NAME));
             }
             catch (Exception ex)
             {
@@ -36,7 +35,7 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                await _manageElasticsearch.CreateIndexAsync(IndexConstant.INDEX_ALIAS_MOVIES);
+                await _manageElasticsearch.CreateIndexAsync(WhatflixConstants.DATABASE_NAME);
                 return Ok();
             }
             catch (Exception ex)
@@ -50,7 +49,7 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                await _manageElasticsearch.SetIndexAsync(index, IndexConstant.INDEX_ALIAS_MOVIES);
+                await _manageElasticsearch.SetIndexAsync(index, WhatflixConstants.DATABASE_NAME);
                 return Ok();
             }
             catch (Exception ex)
