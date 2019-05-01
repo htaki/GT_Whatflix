@@ -15,7 +15,8 @@ namespace Whatflix.Data.Mongo.Repository
         public const string COLLECTION_NAME = "movies";
         private IMapper _mapper;
 
-        public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings, IMapper mapper) : base(serviceSettings, mapper, COLLECTION_NAME)
+        public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings, 
+            IMapper mapper) : base(serviceSettings, mapper, COLLECTION_NAME)
         {
             _mapper = mapper;
         }
@@ -96,6 +97,7 @@ namespace Whatflix.Data.Mongo.Repository
             var favoriteActorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, favoriteActors);
             var favoriteDirectorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, favoriteDirectors);
             var favoriteLanguageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, preferredLanguages);
+
             return Builders<MovieMdo>.Filter.And(Builders<MovieMdo>.Filter.Or(favoriteActorFilter, favoriteDirectorFilter), favoriteLanguageFilter);
         }
 
