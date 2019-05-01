@@ -18,7 +18,7 @@ namespace Whatflix.Presentation.Api.Helpers
         private const string USER_PREFERENCE_PATH = "wwwroot/user_preferences.json";
         private static List<UserPreferenceModel> _userPreferenceModels;
 
-        public IEnumerable<MovieModel> GetMovies()
+        public virtual IEnumerable<MovieModel> GetMovies()
         {
             var movies = new List<MovieModel>();
 
@@ -28,12 +28,12 @@ namespace Whatflix.Presentation.Api.Helpers
             return movies;
         }
 
-        public IEnumerable<UserPreferenceModel> GetUserPreferences()
+        public virtual IEnumerable<UserPreferenceModel> GetUserPreferences()
         {
             return ReadFromUserPreferenceJson();
         }
 
-        public UserPreferenceModel GetUserPreferencesByUserId(int userId)
+        public virtual UserPreferenceModel GetUserPreferencesByUserId(int userId)
         {
             return ReadFromUserPreferenceJson().FirstOrDefault(f => f.UserId == userId);
         }
@@ -97,7 +97,7 @@ namespace Whatflix.Presentation.Api.Helpers
             }
             catch
             {
-                return "English";
+                return originalLanguage;
             }
         }
 

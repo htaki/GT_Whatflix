@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Settings.Elasticsearch;
-using Whatflix.Infrastructure.Helpers.Constants;
 
 namespace Whatflix.Data.Elasticsearch.Settings
 {
@@ -20,13 +19,7 @@ namespace Whatflix.Data.Elasticsearch.Settings
         public async Task<ICreateIndexResponse> CreateIndexAsync(string indexAlias)
         {
             string index = GenerateIndex(indexAlias);
-
-            if (WhatflixConstants.DATABASE_NAME == indexAlias)
-            {
-                return await _elasticsearchWrapper.GetClient(indexAlias).CreateIndexAsync(index, AnalyzedMapping.MoviesIndexDescriptor);
-            }
-
-            return await _elasticsearchWrapper.GetClient(indexAlias).CreateIndexAsync(index, AnalyzedMapping.UserPreferencesIndexDescriptor);
+            return await _elasticsearchWrapper.GetClient(indexAlias).CreateIndexAsync(index, AnalyzedMapping.MoviesIndexDescriptor);
         }
 
         public async Task<IEnumerable<string>> GetIndicesAsync(string indexAlias)

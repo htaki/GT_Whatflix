@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Whatflix.Domain.Dto.Movie;
-using Whatflix.Domain.Dto.UserPreference;
 using Whatflix.Domain.Manage;
 using Whatflix.Presentation.Api.Helpers;
 

@@ -17,7 +17,7 @@ namespace Whatflix.Presentation.Api.Controllers
             _manageElasticsearch = manageElasticsearch;
         }
 
-        [HttpGet("movies/index")]
+        [HttpGet("index")]
         public async Task<IActionResult> GetMoviesIndices()
         {
             try
@@ -30,7 +30,7 @@ namespace Whatflix.Presentation.Api.Controllers
             }
         }
 
-        [HttpPost("movies/index")]
+        [HttpPost("index")]
         public async Task<IActionResult> CreateMoviesIndex()
         {
             try
@@ -44,7 +44,7 @@ namespace Whatflix.Presentation.Api.Controllers
             }
         }
 
-        [HttpPut("movies/index")]
+        [HttpPut("index")]
         public async Task<IActionResult> SetMoviesIndex(string index)
         {
             try

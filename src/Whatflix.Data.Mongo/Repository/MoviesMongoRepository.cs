@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
@@ -81,7 +80,9 @@ namespace Whatflix.Data.Mongo.Repository
             await _collection.UpdateManyAsync(filterDefinition, updateDefinition);
         }
 
-        public async Task<List<IMovieEntity>> GetRecommendationsAsync(List<string> favoriteActors, List<string> favoriteDirectors, List<string> preferredLanguages)
+        public async Task<List<IMovieEntity>> GetRecommendationsAsync(List<string> favoriteActors,
+            List<string> favoriteDirectors,
+            List<string> preferredLanguages)
         {
             var favoriteActorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, favoriteActors);
             var favoriteDirectorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, favoriteDirectors);

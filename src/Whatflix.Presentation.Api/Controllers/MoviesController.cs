@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Whatflix.Domain.Dto.Movie;
+using Whatflix.Domain.Abstract.Dto.Movie;
+using Whatflix.Domain.Abstract.Dto.UserPreference;
+using Whatflix.Domain.Abstract.Manage;
 using Whatflix.Domain.Dto.UserPreference;
-using Whatflix.Domain.Manage;
 using Whatflix.Presentation.Api.Helpers;
 
 namespace Whatflix.Presentation.Api.Controllers
@@ -16,11 +17,11 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly Movie _manageMovie;
+        private readonly IMovie _manageMovie;
         private readonly ControllerHelper _controllerHelper;
         private readonly IMapper _mapper;
 
-        public MoviesController(Movie manageMovie, ControllerHelper controllerHelper, IMapper mapper)
+        public MoviesController(IMovie manageMovie, ControllerHelper controllerHelper, IMapper mapper)
         {
             _manageMovie = manageMovie;
             _controllerHelper = controllerHelper;
@@ -32,6 +33,11 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
+                if (userId <= 0)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, "The userId is not valid.");
+                }
+
                 if (string.IsNullOrEmpty(text))
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, "Search text cannot be empty.");
@@ -65,7 +71,7 @@ namespace Whatflix.Presentation.Api.Controllers
         {
             try
             {
-                return Ok(await _manageMovie.GetRecommendationsAsync(_mapper.Map<IEnumerable<UserPreferenceDto>>(_controllerHelper.GetUserPreferences())));
+                return Ok(await _manageMovie.GetRecommendationsAsync(_mapper.Map<IEnumerable<IUserPreferenceDto>>(_controllerHelper.GetUserPreferences())));
             }
             catch (Exception ex)
             {
@@ -73,12 +79,12 @@ namespace Whatflix.Presentation.Api.Controllers
             }
         }
 
-        private IEnumerable<string> MapMovies(List<MovieDto>[] movieList, out List<int> movieIds)
+        private IEnumerable<string> MapMovies(List<IMovieDto>[] movieList, out List<int> movieIds)
         {
             movieIds = new List<int>();
 
-            var userPreferredMovies = movieList[0] ?? new List<MovieDto>();
-            var otherMovies = movieList[1] ?? new List<MovieDto>();
+            var userPreferredMovies = movieList[0] ?? new List<IMovieDto>();
+            var otherMovies = movieList[1] ?? new List<IMovieDto>();
             otherMovies = otherMovies.Where(o => !userPreferredMovies.Any(u => o.Title == u.Title)).ToList();
 
             var movies = userPreferredMovies.Concat(otherMovies);

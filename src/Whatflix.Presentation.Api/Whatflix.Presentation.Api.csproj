@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Whatflix.Domain\Whatflix.Domain.csproj" />
+    <ProjectReference Include="..\Whatflix.Domain.Abstract\Whatflix.Domain.Abstract.csproj" />
     <ProjectReference Include="..\Whatflix.Infrastructure.Injection\Whatflix.Infrastructure.Injection.csproj" />
     <ProjectReference Include="..\Whatflix.Infrastructure.Mapping\Whatflix.Infrastructure.Mapping.csproj" />
   </ItemGroup>

@@ -86,7 +86,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
                             .Terms(favoriteLanguages)
                         )
                     )
-                    .Filter(fi => 
+                    .Filter(fi =>
                     {
                         var queryContainer = new QueryContainer();
 
@@ -138,7 +138,9 @@ namespace Whatflix.Data.Elasticsearch.Repository
              );
         }
 
-        public async Task<List<IMovieEntity>> GetRecommendationsAsync(List<string> favoriteActors, List<string> favoriteDirectors, List<string> preferredLanguages)
+        public async Task<List<IMovieEntity>> GetRecommendationsAsync(List<string> favoriteActors,
+            List<string> favoriteDirectors,
+            List<string> preferredLanguages)
         {
             QueryContainer searchQuery(QueryContainerDescriptor<MovieAdo> query) => query
               .Bool(b => b

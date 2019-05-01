@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Whatflix.Data.Abstract\Whatflix.Data.Abstract.csproj" />
+    <ProjectReference Include="..\Whatflix.Domain.Abstract\Whatflix.Domain.Abstract.csproj" />
     <ProjectReference Include="..\Whatflix.Infrastructure\Whatflix.Infrastructure.csproj" />
   </ItemGroup>
 
