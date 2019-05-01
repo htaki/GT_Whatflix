@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using Whatflix.Domain.Abstract.Dto.Movie;
+using Whatflix.Domain.Abstract.Dto.UserPreference;
 using Whatflix.Domain.Abstract.Manage;
 using Whatflix.Domain.Dto.UserPreference;
 using Whatflix.Presentation.Api.Controllers;
@@ -67,7 +68,7 @@ namespace Whatflix.Presentation.Api.Test
         {
             // Arrange
             _mockMovie.Setup(s => s.SearchAsync(It.IsAny<string[]>())).ReturnsAsync(MockMovieDtos);
-            _mockMovie.Setup(s => s.SearchAsync(It.IsAny<string[]>(), It.IsAny<UserPreferenceDto>())).ReturnsAsync(MockMovieDtos);
+            _mockMovie.Setup(s => s.SearchAsync(It.IsAny<string[]>(), It.IsAny<IUserPreferenceDto>())).ReturnsAsync(MockMovieDtos);
             _mockMovie.Setup(s => s.UpdateAppeardInSearchAsync(new List<int> { 1, 2, 3 }));
             _mockControllerHelper.Setup(s => s.GetUserPreferencesByUserId(100)).Returns(MockUserPreferenceModel);
             var expectedStatusCode = StatusCodes.Status200OK;
