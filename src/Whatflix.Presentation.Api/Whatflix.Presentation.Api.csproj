@@ -32,8 +32,12 @@
 
   <ItemGroup>
     <None Include="wwwroot\Mongo.txt" />
-    <None Include="wwwroot\tmdb_5000_credits.csv" />
-    <None Include="wwwroot\tmdb_5000_movies.csv" />
+    <None Include="wwwroot\tmdb_5000_credits.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\tmdb_5000_movies.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

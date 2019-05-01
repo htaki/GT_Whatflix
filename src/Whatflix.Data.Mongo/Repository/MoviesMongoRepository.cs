@@ -73,7 +73,7 @@ namespace Whatflix.Data.Mongo.Repository
             return _mapper.Map<List<IMovieEntity>>(mongoDataObjects);
         }
 
-        public async Task UpdatedAppeardInSearchAsync(List<int> movieIds)
+        public async Task UpdateAppeardInSearchAsync(List<int> movieIds)
         {
             var filterDefinition = Builders<MovieMdo>.Filter.In(f => f.MovieId, movieIds);
             var updateDefinition = Builders<MovieMdo>.Update.Inc(f => f.AppearedInSearches, 1);

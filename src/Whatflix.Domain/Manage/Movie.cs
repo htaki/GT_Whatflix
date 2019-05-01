@@ -33,9 +33,9 @@ namespace Whatflix.Domain.Manage
             return _mapper.Map<List<MovieDto>>(movieObjects);
         }
 
-        public async void UpdatedAppeardInSearchAsync(List<int> movieIds)
+        public async void UpdateAppeardInSearchAsync(List<int> movieIds)
         {
-            await _moviesRepository.UpdatedAppeardInSearchAsync(movieIds);
+            await _moviesRepository.UpdateAppeardInSearchAsync(movieIds);
         }
 
         public async Task<List<MovieDto>> SearchAsync(string[] searchWords)

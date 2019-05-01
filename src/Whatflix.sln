@@ -27,6 +27,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Whatflix.Infrastructure.Inj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Whatflix.Infrastructure.Mapping", "Whatflix.Infrastructure.Mapping\Whatflix.Infrastructure.Mapping.csproj", "{8CBE8C89-68D4-4A75-B9B9-8FAD55B71FF4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 - Tests", "00 - Tests", "{ACF17020-352F-45EB-A3E7-917A05937485}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatflix.Presentation.Api.Test", "Whatflix.Presentation.Api.Test\Whatflix.Presentation.Api.Test.csproj", "{E29F47A3-666E-4908-BDEC-3A95F92BA649}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatflix.Domain.Test", "Whatflix.Domain.Test\Whatflix.Domain.Test.csproj", "{7BA18848-0946-4848-BC5E-11DE8A129B8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +71,14 @@ Global
 		{8CBE8C89-68D4-4A75-B9B9-8FAD55B71FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CBE8C89-68D4-4A75-B9B9-8FAD55B71FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CBE8C89-68D4-4A75-B9B9-8FAD55B71FF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E29F47A3-666E-4908-BDEC-3A95F92BA649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E29F47A3-666E-4908-BDEC-3A95F92BA649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E29F47A3-666E-4908-BDEC-3A95F92BA649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E29F47A3-666E-4908-BDEC-3A95F92BA649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BA18848-0946-4848-BC5E-11DE8A129B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA18848-0946-4848-BC5E-11DE8A129B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BA18848-0946-4848-BC5E-11DE8A129B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BA18848-0946-4848-BC5E-11DE8A129B8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +92,8 @@ Global
 		{6CC7014F-80FD-4A97-B5F6-8DE16A5C7704} = {644CFA17-2F55-4E3C-8231-E79B181A450C}
 		{1F47AD18-F929-452E-9B22-5CD19F4D3B99} = {D1D3C993-1F7C-4D05-B3BD-0F7A33EEE4E0}
 		{8CBE8C89-68D4-4A75-B9B9-8FAD55B71FF4} = {D1D3C993-1F7C-4D05-B3BD-0F7A33EEE4E0}
+		{E29F47A3-666E-4908-BDEC-3A95F92BA649} = {ACF17020-352F-45EB-A3E7-917A05937485}
+		{7BA18848-0946-4848-BC5E-11DE8A129B8F} = {ACF17020-352F-45EB-A3E7-917A05937485}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F3E796-4C69-4EF3-BC94-B774F2C4D7FC}

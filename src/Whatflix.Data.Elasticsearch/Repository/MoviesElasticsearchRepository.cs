@@ -125,7 +125,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
             return _mapper.Map<List<IMovieEntity>>(doucments);
         }
 
-        public async Task UpdatedAppeardInSearchAsync(List<int> movieIds)
+        public async Task UpdateAppeardInSearchAsync(List<int> movieIds)
         {
             await _client.UpdateByQueryAsync<MovieAdo>(u => u.Query(q => q
                     .Terms(t => t

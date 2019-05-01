@@ -41,7 +41,7 @@ namespace Whatflix.Presentation.Api.Controllers
 
                 if (userPreference == null)
                 {
-
+                    return StatusCode((int)HttpStatusCode.BadRequest, $"The user with userId: '{userId}' is not defined.");
                 }
 
                 var userMoviesTask = _manageMovie.SearchAsync(GetSearchWords(text), _mapper.Map<UserPreferenceDto>(userPreference));
@@ -51,7 +51,7 @@ namespace Whatflix.Presentation.Api.Controllers
                 var movieIds = new List<int>();
                 var movieResult = MapMovies(movieList, out movieIds);
 
-                _manageMovie.UpdatedAppeardInSearchAsync(movieIds);
+                _manageMovie.UpdateAppeardInSearchAsync(movieIds);
                 return Ok(movieResult);
             }
             catch (Exception ex)
