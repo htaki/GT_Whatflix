@@ -19,38 +19,45 @@ namespace Whatflix.Presentation.Api.Test.Helpers
         }
 
         [TestMethod]
-        public void Get_ReturnsListOfMovies() 
+        public void Get_ReturnsListOfMovies()
         {
+            //Arrange 
+            var expectedType = typeof(IEnumerable<MovieModel>);
+
             // Act
             var actualResult = _controllerHelper.GetMovies();
 
             // Assert
-            Assert.IsInstanceOfType(actualResult, typeof(IEnumerable<MovieModel>));
+            Assert.IsInstanceOfType(actualResult, expectedType);
             Assert.IsTrue(actualResult.Count() > 0);
         }
 
         [TestMethod]
-        public void Get_ReturnsListOfUserPreferences() 
+        public void Get_ReturnsListOfUserPreferences()
         {
+            //Arrange 
+            var expectedType = typeof(IEnumerable<UserPreferenceModel>);
+
             // Act
             var actualResult = _controllerHelper.GetUserPreferences();
 
             // Assert
-            Assert.IsInstanceOfType(actualResult, typeof(IEnumerable<UserPreferenceModel>));
+            Assert.IsInstanceOfType(actualResult, expectedType);
             Assert.IsTrue(actualResult.Count() > 0);
         }
 
         [TestMethod]
-        public void Get_ValidUserId_ReturnsUserPreference() 
+        public void Get_ValidUserId_ReturnsUserPreference()
         {
             //Arrange
-            int validUserId = 100;
+            var expectedType = typeof(UserPreferenceModel);
+            var validUserId = 100;
 
             // Act
             var actualResult = _controllerHelper.GetUserPreferencesByUserId(validUserId);
 
             // Assert
-            Assert.IsInstanceOfType(actualResult, typeof(UserPreferenceModel));
+            Assert.IsInstanceOfType(actualResult, expectedType);
             Assert.IsNotNull(actualResult);
         }
 
@@ -58,7 +65,7 @@ namespace Whatflix.Presentation.Api.Test.Helpers
         public void Get_InvalidUserId_ReturnsNull()
         {
             //Arrange
-            int invalidUserId = 1;
+            var invalidUserId = 1;
 
             // Act
             var actualResult = _controllerHelper.GetUserPreferencesByUserId(invalidUserId);
@@ -66,6 +73,5 @@ namespace Whatflix.Presentation.Api.Test.Helpers
             // Assert
             Assert.IsNull(actualResult);
         }
-
     }
 }
