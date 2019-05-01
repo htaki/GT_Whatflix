@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 using Whatflix.Domain.Abstract.Dto.Movie;
 using Whatflix.Domain.Abstract.Dto.UserPreference;
 using Whatflix.Domain.Abstract.Manage;
+using Whatflix.Domain.Dto.Movie;
 using Whatflix.Presentation.Api.Controllers;
 using Whatflix.Presentation.Api.Helpers;
 using Whatflix.Presentation.Api.Models;
@@ -77,15 +79,23 @@ namespace Whatflix.Presentation.Api.Test.Controllers
 
             // Assert
             Assert.IsInstanceOfType(actualResult, typeof(ObjectResult));
-            Assert.IsInstanceOfType(((ObjectResult)actualResult).Value, typeof(IEnumerable<string>));
-            Assert.AreEqual(((ObjectResult)actualResult).StatusCode, expectedStatusCode);
+            var result = (ObjectResult)actualResult;
+            Assert.AreEqual(result.StatusCode, expectedStatusCode);
+            Assert.AreEqual((result.Value as IEnumerable<string>).ElementAt(0), "The Equalizer");
         }
 
         private List<IMovieDto> MockMovieDtos()
         {
             return new List<IMovieDto>
             {
-
+                new MovieDto
+                {
+                    Actors = new List<string>{ "Denzel Washington" },
+                    Director = "Antoine Fuqua",
+                    Language = "English",
+                    MovieId = 1,
+                    Title = "The Equalizer"
+                }
             };
         }
 
@@ -93,7 +103,10 @@ namespace Whatflix.Presentation.Api.Test.Controllers
         {
             return new UserPreferenceModel
             {
-
+                FavoriteDirectors = new List<string> { "Steven Spielberg", "Martin Scorsese", "Pedro Almodóvar" },
+                FavoriteActors = new List<string> { "Denzel Washington", "Kate Winslet", "Emma Suárez", "Tom Hanks" },
+                PreferredLanguages = new List<string> { "English", "Spanish" },
+                UserId = 100
             };
         }
     }
