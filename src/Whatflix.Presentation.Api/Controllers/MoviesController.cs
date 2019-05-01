@@ -51,7 +51,7 @@ namespace Whatflix.Presentation.Api.Controllers
                 var movieIds = new List<int>();
                 var movieResult = MapMovies(movieList, out movieIds);
 
-                _manageMovie.UpdatedAppeardOnSearchAsync(movieIds);
+                _manageMovie.UpdatedAppeardInSearchAsync(movieIds);
                 return Ok(movieResult);
             }
             catch (Exception ex)
@@ -63,7 +63,14 @@ namespace Whatflix.Presentation.Api.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> GetRecommendations()
         {
-            return Ok(await _manageMovie.GetRecommendationsAsync());
+            try
+            {
+                return Ok(await _manageMovie.GetRecommendationsAsync(_mapper.Map<IEnumerable<UserPreferenceDto>>(_controllerHelper.GetUserPreferences())));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
         private IEnumerable<string> MapMovies(List<MovieDto>[] movieList, out List<int> movieIds)

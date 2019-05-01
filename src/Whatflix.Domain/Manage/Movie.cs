@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,12 +28,12 @@ namespace Whatflix.Domain.Manage
 
         public async Task<List<MovieDto>> SearchAsync(string[] searchWords, UserPreferenceDto userPreference)
         {
-            var movieObjects = await _moviesRepository.SearchAsync(searchWords, 
+            var movieObjects = await _moviesRepository.SearchAsync(searchWords,
                 userPreference.FavoriteActors, userPreference.FavoriteDirectors, userPreference.PreferredLanguages);
             return _mapper.Map<List<MovieDto>>(movieObjects);
         }
 
-        public async void UpdatedAppeardOnSearchAsync(List<int> movieIds)
+        public async void UpdatedAppeardInSearchAsync(List<int> movieIds)
         {
             await _moviesRepository.UpdatedAppeardInSearchAsync(movieIds);
         }
@@ -45,26 +44,21 @@ namespace Whatflix.Domain.Manage
             return _mapper.Map<List<MovieDto>>(movieObjects);
         }
 
-        public async Task<List<RecommendationsDto>> GetRecommendationsAsync()
+        public async Task<List<RecommendationsDto>> GetRecommendationsAsync(IEnumerable<UserPreferenceDto> userPreferences)
         {
-            throw new NotImplementedException();
+            var recommendations = new List<RecommendationsDto>();
+
+            foreach (var userPreference in userPreferences)
+            {
+                var recommendedMovies = await _moviesRepository.GetRecommendationsAsync(userPreference.FavoriteActors, userPreference.FavoriteDirectors, userPreference.PreferredLanguages);
+                recommendations.Add(new RecommendationsDto
+                {
+                    Movies = recommendedMovies.Select(r => r.Title).OrderBy(o => o),
+                    User = userPreference.UserId
+                });
+            }
+
+            return recommendations;
         }
-
-        //public async Task<List<RecommendationsDto>> GetRecommendationsAsync(List<UserPreferenceDto> userPreferences)
-        //{
-        //    var recommendations = new List<RecommendationsDto>();
-
-        //    foreach (var userPreference in userPreferences)
-        //    {
-        //        var recommendedMovies = await _moviesRepository.GetRecommendationByMovieIdsAsync(userPreferences);
-        //        recommendations.Add(new RecommendationsDto
-        //        {
-        //            Movies = recommendedMovies.OrderBy(o => o),
-        //            User = userPreference.UserId
-        //        });
-        //    }
-
-        //    return recommendations;
-        //}
     }
 }

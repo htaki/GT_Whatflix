@@ -10,6 +10,6 @@ namespace Whatflix.Data.Abstract.Repository
         Task<List<IMovieEntity>> SearchAsync(string[] searchWords);
         Task<List<IMovieEntity>> SearchAsync(string[] searchWords, List<string> favoriteActors, List<string> favoriteDirectors, List<string> favoriteLanguages);
         Task UpdatedAppeardInSearchAsync(List<int> movieIds);
-        //Task<IEnumerable<string>> GetRecommendationByMovieIdsAsync(List<int> movieIds);
+        Task<List<IMovieEntity>> GetRecommendationsAsync(List<string> favoriteActors, List<string> favoriteDirectors, List<string> preferredLanguages);
     }
 }

@@ -81,21 +81,26 @@ namespace Whatflix.Data.Mongo.Repository
             await _collection.UpdateManyAsync(filterDefinition, updateDefinition);
         }
 
-        public async Task<IEnumerable<string>> GetRecommendationByMovieIdsAsync(List<int> movieIds)
+        public async Task<List<IMovieEntity>> GetRecommendationsAsync(List<string> favoriteActors, List<string> favoriteDirectors, List<string> preferredLanguages)
         {
-            var filterDefinition = Builders<MovieMdo>.Filter.In(f => f.MovieId, movieIds);
-            var sortDefinition = Builders<MovieMdo>.Sort.Ascending(m => m.AppearedInSearches);
+            var favoriteActorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, favoriteActors);
+            var favoriteDirectorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, favoriteDirectors);
+            var favoriteLanguageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, preferredLanguages);
+            var filterDefinition = Builders<MovieMdo>.Filter.And(Builders<MovieMdo>.Filter.Or(favoriteActorFilter, favoriteDirectorFilter), favoriteLanguageFilter);
+
+            var sortDefinition = Builders<MovieMdo>.Sort.Descending(m => m.AppearedInSearches);
             var findOptions = new FindOptions<MovieMdo, MovieMdo>
             {
+                Collation = _caseInsensitiveCollation,
                 Sort = sortDefinition,
                 Projection = Builders<MovieMdo>.Projection.Include(p => p.Title),
                 Limit = 3
             };
 
             var movieCusror = await _collection.FindAsync(filterDefinition, findOptions);
-            var mongoDataObjects = await movieCusror?.ToListAsync();
+            var mongoDataObjects = await movieCusror.ToListAsync();
 
-            return mongoDataObjects.Select(m => m.Title);
+            return _mapper.Map<List<IMovieEntity>>(mongoDataObjects);
         }
     }
 }
