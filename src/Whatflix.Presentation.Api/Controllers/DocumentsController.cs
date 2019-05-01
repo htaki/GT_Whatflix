@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Whatflix.Domain.Abstract.Manage;
 using Whatflix.Domain.Dto.Movie;
-using Whatflix.Domain.Manage;
 using Whatflix.Presentation.Api.Helpers;
 
 namespace Whatflix.Presentation.Api.Controllers
@@ -15,15 +15,15 @@ namespace Whatflix.Presentation.Api.Controllers
     public class DocumentsController : ControllerBase
     {
         private readonly ControllerHelper _controllerHelper;
-        private readonly Movie _manageMovie;
+        private readonly IMovie _manageMovie;
         private readonly IMapper _mapper;
 
-        public DocumentsController(Movie moviesRepository,
-            ControllerHelper controllerHelper,
+        public DocumentsController(ControllerHelper controllerHelper, 
+            IMovie manageMovie,
             IMapper mapper)
         {
             _controllerHelper = controllerHelper;
-            _manageMovie = moviesRepository;
+            _manageMovie = manageMovie;
             _mapper = mapper;
         }
 

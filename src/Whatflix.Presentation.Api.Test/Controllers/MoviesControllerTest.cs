@@ -29,7 +29,7 @@ namespace Whatflix.Presentation.Api.Test.Controllers
             _mockMovie = new Mock<IMovie>();
             _mockControllerHelper = new Mock<ControllerHelper>();
             _mockMapper = new Mock<IMapper>();
-            _moviesController = new MoviesController(_mockMovie.Object, _mockControllerHelper.Object, _mockMapper.Object);
+            _moviesController = new MoviesController(_mockControllerHelper.Object, _mockMovie.Object, _mockMapper.Object);
         }
 
         [TestMethod]

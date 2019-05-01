@@ -17,11 +17,13 @@ namespace Whatflix.Presentation.Api.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly IMovie _manageMovie;
         private readonly ControllerHelper _controllerHelper;
+        private readonly IMovie _manageMovie;
         private readonly IMapper _mapper;
 
-        public MoviesController(IMovie manageMovie, ControllerHelper controllerHelper, IMapper mapper)
+        public MoviesController(ControllerHelper controllerHelper,
+            IMovie manageMovie,
+            IMapper mapper)
         {
             _manageMovie = manageMovie;
             _controllerHelper = controllerHelper;
