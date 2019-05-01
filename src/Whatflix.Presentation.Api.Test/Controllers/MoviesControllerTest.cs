@@ -7,12 +7,11 @@ using System.Collections.Generic;
 using Whatflix.Domain.Abstract.Dto.Movie;
 using Whatflix.Domain.Abstract.Dto.UserPreference;
 using Whatflix.Domain.Abstract.Manage;
-using Whatflix.Domain.Dto.UserPreference;
 using Whatflix.Presentation.Api.Controllers;
 using Whatflix.Presentation.Api.Helpers;
 using Whatflix.Presentation.Api.Models;
 
-namespace Whatflix.Presentation.Api.Test
+namespace Whatflix.Presentation.Api.Test.Controllers
 {
     [TestClass]
     public class MoviesControllerTest
