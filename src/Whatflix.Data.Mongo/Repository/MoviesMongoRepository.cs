@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
@@ -21,6 +22,11 @@ namespace Whatflix.Data.Mongo.Repository
 
         public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords)
         {
+            if (searchWords == null)
+            {
+                throw new ArgumentNullException(nameof(searchWords));
+            }
+
             var filterDefinition = GetSearchWordsFilter(searchWords);
             var findOptions = new FindOptions<MovieMdo, MovieMdo>
             {
@@ -37,6 +43,11 @@ namespace Whatflix.Data.Mongo.Repository
             List<string> favoriteDirectors,
             List<string> preferredLanguages)
         {
+            if (searchWords == null)
+            {
+                throw new ArgumentNullException(nameof(searchWords));
+            }
+
             var searchFilter = GetSearchWordsFilter(searchWords);
             var userPreferenceFilter = GetUserPreferenceFilter(favoriteActors, favoriteDirectors, preferredLanguages);
             var filterDefinition = Builders<MovieMdo>.Filter.And(searchFilter, userPreferenceFilter);
@@ -53,6 +64,11 @@ namespace Whatflix.Data.Mongo.Repository
 
         public async Task UpdateAppeardInSearchAsync(List<int> movieIds)
         {
+            if (movieIds == null)
+            {
+                throw new ArgumentNullException(nameof(movieIds));
+            }
+
             var filterDefinition = Builders<MovieMdo>.Filter.In(f => f.MovieId, movieIds);
             var updateDefinition = Builders<MovieMdo>.Update.Inc(f => f.AppearedInSearches, 1);
 

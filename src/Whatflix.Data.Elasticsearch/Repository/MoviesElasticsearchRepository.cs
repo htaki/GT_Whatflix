@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
 using Nest;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
@@ -44,6 +45,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
             List<string> favoriteDirectors,
             List<string> preferredLanguages)
         {
+            if (searchWords == null)
+            {
+                throw new ArgumentNullException(nameof(searchWords));
+            }
+
             QueryContainer searchQuery(QueryContainerDescriptor<MovieAdo> query) => query
                 .Bool(b => b
                     .Should(s => s
@@ -92,6 +98,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
 
         public async Task UpdateAppeardInSearchAsync(List<int> movieIds)
         {
+            if (movieIds == null)
+            {
+                throw new ArgumentNullException(nameof(movieIds));
+            }
+
             await _client.UpdateByQueryAsync<MovieAdo>(u => u.Query(q => q
                     .Terms(t => t
                         .Field(f => f.MovieId)

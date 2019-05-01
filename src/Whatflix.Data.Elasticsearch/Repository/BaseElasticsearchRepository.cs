@@ -28,6 +28,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
 
         public async Task InsertMany(IEnumerable<TEntity> entities)
         {
+            if (entities == null)
+            {
+                throw new ArgumentNullException(nameof(entities));
+            }
+
             var dataObjects = _mapper.Map<IEnumerable<TDataObject>>(entities);
             var result = await _client.IndexManyAsync(dataObjects);
         }
