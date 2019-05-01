@@ -23,6 +23,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
 
         public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords)
         {
+            if (searchWords == null)
+            {
+                throw new ArgumentNullException(nameof(searchWords));
+            }
+
             var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
                 .Query(query => GetSearchWordsQuery(searchWords))
                 .Sort(so => so
@@ -119,6 +124,11 @@ namespace Whatflix.Data.Elasticsearch.Repository
             List<string> favoriteDirectors,
             List<string> preferredLanguages)
         {
+            if (favoriteActors == null || favoriteDirectors == null || preferredLanguages == null)
+            {
+                throw new ArgumentException("User preference parameters are not valid.");
+            }
+
             QueryContainer searchQuery(QueryContainerDescriptor<MovieAdo> query) => query
               .Bool(b => b
                   .Should(s => s

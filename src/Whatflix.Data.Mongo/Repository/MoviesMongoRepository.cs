@@ -15,7 +15,7 @@ namespace Whatflix.Data.Mongo.Repository
     {
         public const string COLLECTION_NAME = "movies";
 
-        public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings, 
+        public MoviesMongoRepository(IOptions<SettingsWrapper> serviceSettings,
             IMapper mapper) : base(serviceSettings, mapper, COLLECTION_NAME)
         {
         }
@@ -104,6 +104,11 @@ namespace Whatflix.Data.Mongo.Repository
 
         private FilterDefinition<MovieMdo> GetUserPreferenceFilter(List<string> favoriteActors, List<string> favoriteDirectors, List<string> preferredLanguages)
         {
+            if (favoriteActors == null || favoriteDirectors == null || preferredLanguages == null)
+            {
+                throw new ArgumentException("User preference parameters are not valid.");
+            }
+
             var favoriteActorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, favoriteActors);
             var favoriteDirectorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, favoriteDirectors);
             var favoriteLanguageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, preferredLanguages);

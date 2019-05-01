@@ -7,26 +7,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
-using Whatflix.Data.Mongo.Repository;
+using Whatflix.Data.Elasticsearch.Repository;
 using Whatflix.Infrastructure.ServiceSettings;
 
-namespace Whatflix.Data.Mongo.Test.Repository
+namespace Whatflix.Data.Elasticsearch.Test.Repository
 {
     [TestClass]
-    public class MoviesMongoRepositoryTest : BaseRepositoryTest
+    public class MoviesElasticsearchRepositoryTest : BaseRepositoryTest
     {
         private IMovieRepository _movieRepository;
         private IOptions<SettingsWrapper> _mockServieSettings;
         private Mock<IMapper> _mockMapper;
-
 
         [TestInitialize]
         public void InitializeTest()
         {
             _mockServieSettings = CreateSettings();
             _mockMapper = new Mock<IMapper>();
-            _movieRepository = new MoviesMongoRepository(_mockServieSettings, _mockMapper.Object);
-
+            _movieRepository = new MoviesElasticsearchRepository(_mockServieSettings, _mockMapper.Object);
         }
 
         [TestMethod]
