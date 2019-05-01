@@ -189,29 +189,6 @@ namespace Whatflix.Domain.Test.Manage
         }
 
         [TestMethod]
-        public async Task UpdateAppeardInSearchAsync_EmptyParameter_ThrowsArgumentException()
-        {
-            // Arrange
-            var expectedErrorType = typeof(ArgumentException);
-            var expectedMessage = "movieIds cannot be empty.";
-
-            try
-            {
-                // Act
-                await _movie.UpdateAppeardInSearchAsync(new List<int> { });
-
-                // Assert
-                Assert.Fail();
-            }
-            catch (Exception ex)
-            {
-                // Assert
-                Assert.IsInstanceOfType(ex, expectedErrorType);
-                Assert.AreEqual(expectedMessage, ex.Message);
-            }
-        }
-
-        [TestMethod]
         public async Task GetRecommendationsAsync_InvalidParameter_ThrowsArgumentNullException()
         {
             // Arrange

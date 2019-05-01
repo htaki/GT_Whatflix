@@ -87,11 +87,6 @@ namespace Whatflix.Domain.Manage
                 throw new ArgumentNullException(nameof(movieIds));
             }
 
-            if (!movieIds.Any())
-            {
-                throw new ArgumentException($"{nameof(movieIds)} cannot be empty.");
-            }
-
             await _moviesRepository.UpdateAppeardInSearchAsync(movieIds);
         }
 
