@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Options;
 using Nest;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Whatflix.Data.Abstract.Entities.Movie;
 using Whatflix.Data.Abstract.Repository;
@@ -24,22 +22,8 @@ namespace Whatflix.Data.Elasticsearch.Repository
 
         public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords)
         {
-            var multiMatchContainer = new QueryContainer();
-
-            foreach (var searchWord in searchWords)
-            {
-                multiMatchContainer |= new QueryContainerDescriptor<MovieAdo>().MultiMatch(m => m
-                    .Query(searchWord)
-                    .Fields(fs => fs
-                        .Field(f => f.Director.Suffix("keyword"))
-                        .Field(f => f.Title.Suffix("keyword"))
-                        .Field(f => f.Actors.Suffix("keyword"))
-                    )
-                );
-            }
-
             var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
-                .Query(query => multiMatchContainer)
+                .Query(query => GetSearchWordsQuery(searchWords))
                 .Sort(so => so
                     .Ascending(f => f.Title.Suffix("keyword"))
                 )
@@ -60,7 +44,6 @@ namespace Whatflix.Data.Elasticsearch.Repository
             List<string> favoriteDirectors,
             List<string> preferredLanguages)
         {
-
             QueryContainer searchQuery(QueryContainerDescriptor<MovieAdo> query) => query
                 .Bool(b => b
                     .Should(s => s
@@ -86,24 +69,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
                             .Terms(preferredLanguages)
                         )
                     )
-                    .Filter(fi =>
-                    {
-                        var queryContainer = new QueryContainer();
-
-                        foreach (var searchWord in searchWords)
-                        {
-                            queryContainer |= new QueryContainerDescriptor<MovieAdo>().MultiMatch(m => m
-                                .Query(searchWord)
-                                .Fields(fs => fs
-                                    .Field(f => f.Director.Suffix("keyword"))
-                                    .Field(f => f.Title.Suffix("keyword"))
-                                    .Field(f => f.Actors.Suffix("keyword"))
-                                )
-                            );
-                        }
-
-                        return queryContainer;
-                    })
+                    .Filter(fi => GetSearchWordsQuery(searchWords))
                 );
 
             var searchResponse = await _client.SearchAsync<MovieAdo>(s => s
@@ -186,16 +152,27 @@ namespace Whatflix.Data.Elasticsearch.Repository
             return _mapper.Map<List<IMovieEntity>>(doucments);
         }
 
-        private string GetRawQueryForDebug(SearchDescriptor<MovieAdo> query)
-        {
-            // usage:
-            // var debugQuery = GetRawQueryForDebug(new SearchDescriptor<MovieAdo>().Query(searchQuery));
+        #region Private Methods
 
-            using (MemoryStream memoryStream = new MemoryStream())
+        private QueryContainer GetSearchWordsQuery(string[] searchWords)
+        {
+            var multiMatchContainer = new QueryContainer();
+
+            foreach (var searchWord in searchWords)
             {
-                _client.RequestResponseSerializer.Serialize(query, memoryStream);
-                return Encoding.ASCII.GetString(memoryStream.ToArray());
+                multiMatchContainer |= new QueryContainerDescriptor<MovieAdo>().MultiMatch(m => m
+                    .Query(searchWord)
+                    .Fields(fs => fs
+                        .Field(f => f.Director.Suffix("keyword"))
+                        .Field(f => f.Title.Suffix("keyword"))
+                        .Field(f => f.Actors.Suffix("keyword"))
+                    )
+                );
             }
+
+            return multiMatchContainer;
         }
+
+        #endregion
     }
 }
