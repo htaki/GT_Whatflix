@@ -35,3 +35,22 @@ http://whatflix.herokuapp.com
 Deployment:
 	1. Please find the script (./deploy.sh) to automatically deploy to Heroku. (Requires Docker and Heroku CLI.)
 	2. The script also executes the unit tests.
+
+Document schema:
+{
+    "_id" : 14139,
+    "Title" : "Timecrimes",
+    "Language" : "Spanish",
+    "Director" : "Nacho Vigalondo",
+    "Actors" : [ 
+        "Karra Elejalde", 
+        "Candela Fernández", 
+        "Bárbara Goenaga", 
+        "Nacho Vigalondo", 
+        "Juan Inciarte", 
+        "Libby Brien", 
+        "Nicole Dionne", 
+        "Philip Hersh"
+    ],
+    "AppearedInSearches" : 0
+}
