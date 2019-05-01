@@ -8,7 +8,7 @@ namespace Whatflix.Data.Abstract.Repository
     {
         Task InsertMany(IEnumerable<IMovieEntity> entities);
         Task<List<IMovieEntity>> SearchAsync(string[] searchWords);
-        Task<List<IMovieEntity>> SearchAsync(string[] searchWords, List<string> favoriteActors, List<string> favoriteDirectors, List<string> favoriteLanguages);
+        Task<List<IMovieEntity>> SearchAsync(string[] searchWords, List<string> favoriteActors, List<string> favoriteDirectors, List<string> preferredLanguages);
         Task UpdateAppeardInSearchAsync(List<int> movieIds);
         Task<List<IMovieEntity>> GetRecommendationsAsync(List<string> favoriteActors, List<string> favoriteDirectors, List<string> preferredLanguages);
     }

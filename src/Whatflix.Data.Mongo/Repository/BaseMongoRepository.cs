@@ -29,5 +29,12 @@ namespace Whatflix.Data.Mongo.Repository
             var mongoDataObjects = _mapper.Map<IEnumerable<TDataObject>>(entities);
             await _collection.InsertManyAsync(mongoDataObjects);
         }
+
+        public async Task<List<TDataObject>> FindAsync(FilterDefinition<TDataObject> filterDefinition,
+            FindOptions<TDataObject, TDataObject> findOptions)
+        {
+            var cursor = await _collection.FindAsync(filterDefinition, findOptions);
+            return await cursor.ToListAsync();
+        }
     }
 }

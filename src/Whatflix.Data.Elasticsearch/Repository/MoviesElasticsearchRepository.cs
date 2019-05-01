@@ -58,7 +58,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
         public async Task<List<IMovieEntity>> SearchAsync(string[] searchWords,
             List<string> favoriteActors,
             List<string> favoriteDirectors,
-            List<string> favoriteLanguages)
+            List<string> preferredLanguages)
         {
 
             QueryContainer searchQuery(QueryContainerDescriptor<MovieAdo> query) => query
@@ -83,7 +83,7 @@ namespace Whatflix.Data.Elasticsearch.Repository
                             .Field(f => f
                                 .Language.Suffix("keyword")
                             )
-                            .Terms(favoriteLanguages)
+                            .Terms(preferredLanguages)
                         )
                     )
                     .Filter(fi =>
