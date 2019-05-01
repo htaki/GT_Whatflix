@@ -9,7 +9,7 @@ namespace Whatflix.Domain.Abstract.Manage
     {
         Task InsertMany(IEnumerable<IMovieDto> movieDtos);
         Task<List<IMovieDto>> SearchAsync(string[] searchWords, IUserPreferenceDto userPreference);
-        void UpdateAppeardInSearchAsync(List<int> movieIds);
+        Task UpdateAppeardInSearchAsync(List<int> movieIds);
         Task<List<IMovieDto>> SearchAsync(string[] searchWords);
         Task<List<IRecommendationsDto>> GetRecommendationsAsync(IEnumerable<IUserPreferenceDto> userPreferences);
     }

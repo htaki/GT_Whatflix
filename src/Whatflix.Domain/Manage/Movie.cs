@@ -33,7 +33,7 @@ namespace Whatflix.Domain.Manage
 
             if (!movieDtos.Any())
             {
-                throw new ArgumentException(nameof(movieDtos));
+                throw new ArgumentException($"{nameof(movieDtos)} cannot be empty.");
             }
 
             await _moviesRepository.InsertMany(_mapper.Map<IEnumerable<IMovieEntity>>(movieDtos));
@@ -41,11 +41,6 @@ namespace Whatflix.Domain.Manage
 
         public async Task<List<IMovieDto>> SearchAsync(string[] searchWords, IUserPreferenceDto userPreference)
         {
-            if (userPreference == null)
-            {
-                throw new ArgumentNullException(nameof(userPreference));
-            }
-
             if (searchWords == null)
             {
                 throw new ArgumentNullException(nameof(searchWords));
@@ -53,7 +48,12 @@ namespace Whatflix.Domain.Manage
 
             if (!searchWords.Any())
             {
-                throw new ArgumentException(nameof(searchWords));
+                throw new ArgumentException($"{nameof(searchWords)} cannot be empty.");
+            }
+
+            if (userPreference == null)
+            {
+                throw new ArgumentNullException(nameof(userPreference));
             }
 
             var movieObjects = await _moviesRepository.SearchAsync(searchWords,
@@ -62,21 +62,6 @@ namespace Whatflix.Domain.Manage
                 userPreference.PreferredLanguages);
 
             return _mapper.Map<List<IMovieDto>>(movieObjects);
-        }
-
-        public async void UpdateAppeardInSearchAsync(List<int> movieIds)
-        {
-            if (movieIds == null)
-            {
-                throw new ArgumentNullException(nameof(movieIds));
-            }
-
-            if (!movieIds.Any())
-            {
-                throw new ArgumentException(nameof(movieIds));
-            }
-
-            await _moviesRepository.UpdateAppeardInSearchAsync(movieIds);
         }
 
         public async Task<List<IMovieDto>> SearchAsync(string[] searchWords)
@@ -88,11 +73,26 @@ namespace Whatflix.Domain.Manage
 
             if (!searchWords.Any())
             {
-                throw new ArgumentException(nameof(searchWords));
+                throw new ArgumentException($"{nameof(searchWords)} cannot be empty.");
             }
 
             var movieObjects = await _moviesRepository.SearchAsync(searchWords);
             return _mapper.Map<List<IMovieDto>>(movieObjects);
+        }
+
+        public async Task UpdateAppeardInSearchAsync(List<int> movieIds)
+        {
+            if (movieIds == null)
+            {
+                throw new ArgumentNullException(nameof(movieIds));
+            }
+
+            if (!movieIds.Any())
+            {
+                throw new ArgumentException($"{nameof(movieIds)} cannot be empty.");
+            }
+
+            await _moviesRepository.UpdateAppeardInSearchAsync(movieIds);
         }
 
         public async Task<List<IRecommendationsDto>> GetRecommendationsAsync(IEnumerable<IUserPreferenceDto> userPreferences)
@@ -104,7 +104,7 @@ namespace Whatflix.Domain.Manage
 
             if (!userPreferences.Any())
             {
-                throw new ArgumentException(nameof(userPreferences));
+                throw new ArgumentException($"{nameof(userPreferences)} cannot be empty.");
             }
 
             var recommendations = new List<IRecommendationsDto>();
