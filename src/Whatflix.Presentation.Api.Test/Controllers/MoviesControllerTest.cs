@@ -65,7 +65,24 @@ namespace Whatflix.Presentation.Api.Test.Controllers
         }
 
         [TestMethod]
-        public void Get_ValidUserId_ValidSearchText_ReturnsOk()
+        public void Get_ValidUserId_ValidSearchText_InvalidUser_ReturnsBadRequest()
+        {
+            // Arrange
+            var expectedErrorMessage = "The user with userId: '1' is not defined.";
+            var expectedStatusCode = StatusCodes.Status400BadRequest;
+            _mockControllerHelper.Setup(s => s.GetUserPreferencesByUserId(1)).Returns(default(UserPreferenceModel));
+
+            // Act
+            var actualResult = _moviesController.Get(1, "Steven Spielberg").Result;
+
+            // Assert
+            Assert.IsInstanceOfType(actualResult, typeof(ObjectResult));
+            Assert.AreEqual(((ObjectResult)actualResult).Value, expectedErrorMessage);
+            Assert.AreEqual(((ObjectResult)actualResult).StatusCode, expectedStatusCode);
+        }
+
+        [TestMethod]
+        public void Get_ValidUserId_ValidSearchText_Returns200Ok()
         {
             // Arrange
             _mockMovie.Setup(s => s.SearchAsync(It.IsAny<string[]>())).ReturnsAsync(MockMovieDtos);

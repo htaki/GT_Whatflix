@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,11 +26,36 @@ namespace Whatflix.Domain.Manage
 
         public async Task InsertMany(IEnumerable<IMovieDto> movieDtos)
         {
+            if (movieDtos == null)
+            {
+                throw new ArgumentNullException(nameof(movieDtos));
+            }
+
+            if (!movieDtos.Any())
+            {
+                throw new ArgumentException(nameof(movieDtos));
+            }
+
             await _moviesRepository.InsertMany(_mapper.Map<IEnumerable<IMovieEntity>>(movieDtos));
         }
 
         public async Task<List<IMovieDto>> SearchAsync(string[] searchWords, IUserPreferenceDto userPreference)
         {
+            if (userPreference == null)
+            {
+                throw new ArgumentNullException(nameof(userPreference));
+            }
+
+            if (searchWords == null)
+            {
+                throw new ArgumentNullException(nameof(searchWords));
+            }
+
+            if (!searchWords.Any())
+            {
+                throw new ArgumentException(nameof(searchWords));
+            }
+
             var movieObjects = await _moviesRepository.SearchAsync(searchWords,
                 userPreference.FavoriteActors,
                 userPreference.FavoriteDirectors,
@@ -40,17 +66,47 @@ namespace Whatflix.Domain.Manage
 
         public async void UpdateAppeardInSearchAsync(List<int> movieIds)
         {
+            if (movieIds == null)
+            {
+                throw new ArgumentNullException(nameof(movieIds));
+            }
+
+            if (!movieIds.Any())
+            {
+                throw new ArgumentException(nameof(movieIds));
+            }
+
             await _moviesRepository.UpdateAppeardInSearchAsync(movieIds);
         }
 
         public async Task<List<IMovieDto>> SearchAsync(string[] searchWords)
         {
+            if (searchWords == null)
+            {
+                throw new ArgumentNullException(nameof(searchWords));
+            }
+
+            if (!searchWords.Any())
+            {
+                throw new ArgumentException(nameof(searchWords));
+            }
+
             var movieObjects = await _moviesRepository.SearchAsync(searchWords);
             return _mapper.Map<List<IMovieDto>>(movieObjects);
         }
 
         public async Task<List<IRecommendationsDto>> GetRecommendationsAsync(IEnumerable<IUserPreferenceDto> userPreferences)
         {
+            if (userPreferences == null)
+            {
+                throw new ArgumentNullException(nameof(userPreferences));
+            }
+
+            if (!userPreferences.Any())
+            {
+                throw new ArgumentException(nameof(userPreferences));
+            }
+
             var recommendations = new List<IRecommendationsDto>();
 
             foreach (var userPreference in userPreferences)
