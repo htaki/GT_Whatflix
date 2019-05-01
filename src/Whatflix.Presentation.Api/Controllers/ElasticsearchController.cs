@@ -9,6 +9,7 @@ namespace Whatflix.Presentation.Api.Controllers
 {
     [Route("elasticsearch")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ElasticsearchController : ControllerBase
     {
         private readonly ES _manageElasticsearch;
