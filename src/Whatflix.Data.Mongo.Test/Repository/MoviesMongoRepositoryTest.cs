@@ -13,7 +13,7 @@ using Whatflix.Infrastructure.ServiceSettings;
 namespace Whatflix.Data.Mongo.Test.Repository
 {
     [TestClass]
-    public class MoviesMongoRepositoryTest
+    public class MoviesMongoRepositoryTest : BaseRepositoryTest
     {
         private IMovieRepository _movieRepository;
         private IOptions<SettingsWrapper> _mockServieSettings;
@@ -49,27 +49,5 @@ namespace Whatflix.Data.Mongo.Test.Repository
                 Assert.AreEqual(expectedMessage, ex.Message);
             }
         }
-
-        #region Private Methods
-
-        private IOptions<SettingsWrapper> CreateSettings()
-        {
-            return Options.Create(new SettingsWrapper
-            {
-                Databases = new Databases
-                {
-                    Elasticsearch = new Database
-                    {
-                        ConnectionString = "https://vsq4ajXp6Y:NasvTBMfGWreE4g9Ut3XA75@sandbox-cluster-9944218666.ap-southeast-2.bonsaisearch.net"
-                    },
-                    MongoDb = new Database
-                    {
-                        ConnectionString = "mongodb://admin:admin@sandbox-cluster-shard-00-00-a38l5.mongodb.net:27017,sandbox-cluster-shard-00-01-a38l5.mongodb.net:27017,sandbox-cluster-shard-00-02-a38l5.mongodb.net:27017/whatflix?ssl=true&replicaSet=sandbox-cluster-shard-0&authSource=admin&retryWrites=true"
-                    }
-                }
-            });
-        }
-
-        #endregion
     }
 }
