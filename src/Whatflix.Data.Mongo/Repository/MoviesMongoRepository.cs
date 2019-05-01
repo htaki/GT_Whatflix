@@ -111,9 +111,9 @@ namespace Whatflix.Data.Mongo.Repository
 
             var favoriteActorFilter = Builders<MovieMdo>.Filter.AnyIn(f => f.Actors, favoriteActors);
             var favoriteDirectorFilter = Builders<MovieMdo>.Filter.In(f => f.Director, favoriteDirectors);
-            var favoriteLanguageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, preferredLanguages);
+            var preferredLanguageFilter = Builders<MovieMdo>.Filter.In(f => f.Language, preferredLanguages);
 
-            return Builders<MovieMdo>.Filter.And(Builders<MovieMdo>.Filter.Or(favoriteActorFilter, favoriteDirectorFilter), favoriteLanguageFilter);
+            return Builders<MovieMdo>.Filter.And(Builders<MovieMdo>.Filter.Or(favoriteActorFilter, favoriteDirectorFilter), preferredLanguageFilter);
         }
 
         #endregion

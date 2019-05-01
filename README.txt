@@ -13,7 +13,6 @@ Overview:
 Api Endpoints:
 	- Has the endpoint for searching the user by userId and searchText. 
 	- And also, the endpoint fetching the user's movie recommendations.
-	- Endpoints for add, post, update, delete ElasticSearch Index.
 	- Endpoint for replicating the Mongo/ElasticSearch database.
 
 The repository (Mongo/ElasticSearch) is chosen during runtime. 
@@ -25,6 +24,8 @@ Assumptions / Logic:
 	2. Search words is a non-empty string array.
 	3. For recommendations: A field called 'AppearedInSearchs' is added in movies collection which is incremented each time the movie is appeared in the user's recommended search.
 		This adds to the relevance of the search.
+	4. No partial matches.
+	5. User preference is stored in memory (from user_preferences.json).
 
 Application Url:
 http://whatflix.herokuapp.com
