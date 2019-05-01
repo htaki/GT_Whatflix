@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using System.IO;
+using System.Linq;
 using Whatflix.Infrastructure.Injection;
 using Whatflix.Infrastructure.Mapping;
 using Whatflix.Infrastructure.ServiceSettings;
@@ -22,6 +24,10 @@ namespace Whatflix.Api
             Configuration = configuration;
             _injectionModule = new InjectionModule();
             _mappingModule = new MappingModule();
+
+            Console.WriteLine("--- CONFIGURATION ---");
+            Configuration.AsEnumerable().ToList().ForEach(i => Console.WriteLine("{0}", i));
+            Console.WriteLine("--- CONFIGURATION ---");
         }
 
         public IConfiguration Configuration { get; }
