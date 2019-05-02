@@ -22,8 +22,15 @@ namespace Whatflix.Presentation.Api.Helpers
         {
             var movies = new List<MovieModel>();
 
-            ReadFromMoviesDataset(movies);
-            ReadFromCreditsDataset(movies);
+            try
+            {
+                ReadFromMoviesDataset(movies);
+                ReadFromCreditsDataset(movies);
+            }
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("Please include tmdb_5000_movies.csv and tmdb_5000_credits.csv in wwwroot root folder.");
+            }
 
             return movies;
         }

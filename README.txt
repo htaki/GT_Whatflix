@@ -25,7 +25,7 @@ Assumptions / Logic:
 	3. For recommendations: A field called 'AppearedInSearchs' is added in movies collection which is incremented each time the movie is appeared in the user's recommended search.
 		This adds to the relevance of the search.
 	4. No partial matches.
-	5. User preference is stored in memory (from user_preferences.json).
+	5. User preference is stored in memory (read from user_preferences.json).
 
 Application Url:
 http://whatflix.herokuapp.com

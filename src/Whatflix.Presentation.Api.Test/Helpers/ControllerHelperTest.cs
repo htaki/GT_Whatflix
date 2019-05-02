@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Whatflix.Presentation.Api.Helpers;
 using Whatflix.Presentation.Api.Models;
@@ -22,13 +23,21 @@ namespace Whatflix.Presentation.Api.Test.Helpers
         {
             //Arrange 
             var expectedType = typeof(IEnumerable<MovieModel>);
+            var expectedErrorMessage = "Please include tmdb_5000_movies.csv and tmdb_5000_credits.csv in wwwroot root folder.";
 
-            // Act
-            var actualResult = _controllerHelper.GetMovies();
+            try
+            {
+                // Act
+                var actualResult = _controllerHelper.GetMovies();
 
-            // Assert
-            Assert.IsInstanceOfType(actualResult, expectedType);
-            Assert.IsTrue(actualResult.Count() > 0);
+                // Assert
+                Assert.IsInstanceOfType(actualResult, expectedType);
+                Assert.IsTrue(actualResult.Count() > 0);
+            }
+            catch (FileNotFoundException ex)
+            {
+                Assert.AreEqual(expectedErrorMessage, ex.Message);
+            }
         }
 
         [TestMethod]
