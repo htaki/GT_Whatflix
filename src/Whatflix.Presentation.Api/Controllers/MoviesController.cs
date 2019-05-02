@@ -64,6 +64,7 @@ namespace Whatflix.Presentation.Api.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
