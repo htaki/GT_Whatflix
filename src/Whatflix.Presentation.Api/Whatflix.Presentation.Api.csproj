@@ -48,6 +48,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="wwwroot\tmdb_5000_credits.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\tmdb_5000_movies.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\user_preferences.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

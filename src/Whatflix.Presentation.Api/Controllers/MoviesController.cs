@@ -58,8 +58,8 @@ namespace Whatflix.Presentation.Api.Controllers
 
                 var movieIds = new List<int>();
                 var movieResult = MapMovies(movieList, out movieIds);
+                await _manageMovie.UpdateAppeardInSearchAsync(movieIds);
 
-                _manageMovie.UpdateAppeardInSearchAsync(movieIds);
                 return Ok(movieResult);
             }
             catch (Exception ex)
